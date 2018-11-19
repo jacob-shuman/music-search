@@ -29,41 +29,6 @@ import { MusicSearch } from "music-search";
 | iTunes Search API |         Yes |
 | Spotify API       |          No |
 
-## Usage
-
-### Artist Search
-
-### Album Search
-
-```ts
-const itunesAPI = require("node-itunes-search");
-
-const searchOptions = new itunesAPI.ItunesSearchOptions({
-  term: "Queen Bohemian Rhapsody", // All searches require a single string query.
-
-  limit: 1 // An optional maximum number of returned results may be specified.
-});
-
-itunesAPI.searchItunes(searchOptions).then((searchResult: ItunesResult) => {
-  console.log(searchResult);
-});
-```
-
-### Song Search
-
-```ts
-import { lookupItunes, ItunesLookupOptions } from "node-itunes-search";
-
-const lookupOptions = new ItunesLookupOptions({
-  keys: ["560857776"], // Specify ID(s) of desired content
-  keyType: ItunesLookupType.ID // Searching by content ID(s)
-});
-
-lookupItunes(lookupOptions).then((result: ItunesResult) => {
-  console.log(result);
-});
-```
-
 ## API
 
 #### Source
