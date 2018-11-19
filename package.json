@@ -1,6 +1,6 @@
 {
   "name": "music-search",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A music metadata search utility package for Node JS.",
   "main": "build/index.js",
   "types": "build/index.js",
