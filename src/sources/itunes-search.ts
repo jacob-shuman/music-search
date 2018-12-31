@@ -9,185 +9,263 @@ import {
   ItunesEntityMusic,
   lookupItunes,
   ItunesLookupOptions,
-  ItunesLookupType
+  ItunesLookupType,
+  ItunesProperties,
+  ItunesResult
 } from "node-itunes-search";
 import { MusicSearchOptions } from "../search";
 
 export class ItunesSearchSource implements Source {
   name = "Itunes";
 
-  getArtist = (options: MusicSearchOptions) =>
-    new Promise<SourceResult<MusicResult>>(async (resolve, reject) => {
-      const artists = Array<Artist>();
-      const albums = Array<Album>();
-      const songs = Array<Song>();
+  async getArtist(
+    options: MusicSearchOptions
+  ): Promise<SourceResult<MusicResult>> {
+    const artists = Array<Artist>();
+    const albums = Array<Album>();
+    const songs = Array<Song>();
 
-      const itunesArtists = await searchItunes(
-        new ItunesSearchOptions({
-          term: options.query,
-          entity: ItunesEntityMusic.MusicArtist,
-          limit: options.artistLimit
-        })
-      );
+    const itunesArtists = await searchItunes(
+      new ItunesSearchOptions({
+        term: options.query,
+        entity: ItunesEntityMusic.MusicArtist,
+        limit: options.artistLimit
+      })
+    );
 
-      for (let artistResult of itunesArtists.results) {
-        if (artistResult.artistId) {
-          artists.push(
-            new Artist({
-              id: artistResult.artistId,
-              name: artistResult.artistName
-            })
-          );
+    for (let artistResult of itunesArtists.results) {
+      if (artistResult.artistId && artistResult.artistName) {
+        artists.push({
+          id: artistResult.artistId,
+          name: artistResult.artistName
+        });
 
-          const itunesAlbums = await lookupItunes(
-            new ItunesLookupOptions({
-              keys: [artistResult.artistId.toString()],
-              keyType: ItunesLookupType.ID,
-              entity: ItunesEntityMusic.Album,
-              limit: options.albumLimit
-            })
-          );
+        const itunesAlbums = await lookupItunes(
+          new ItunesLookupOptions({
+            keys: [artistResult.artistId.toString()],
+            keyType: ItunesLookupType.ID,
+            entity: ItunesEntityMusic.Album,
+            limit: options.albumLimit
+          })
+        );
 
-          for (let albumResult of itunesAlbums.results) {
-            if (albumResult.collectionId) {
-              albums.push(
-                new Album({
-                  id: albumResult.collectionId,
-                  name: albumResult.collectionName,
-                  trackCount: albumResult.trackCount,
-                  artistId: artistResult.artistId
-                })
-              );
+        for (let albumResult of itunesAlbums.results) {
+          if (albumResult.collectionId) {
+            albums.push({
+              id: albumResult.collectionId,
+              name: albumResult.collectionName,
+              trackCount: albumResult.trackCount,
+              artistId: artistResult.artistId
+            });
 
-              const itunesSongs = await lookupItunes(
-                new ItunesLookupOptions({
-                  keys: [artistResult.artistId.toString()],
-                  keyType: ItunesLookupType.ID,
-                  entity: ItunesEntityMusic.Album,
-                  limit: options.albumLimit
-                })
-              );
+            const itunesSongs = await lookupItunes(
+              new ItunesLookupOptions({
+                keys: [artistResult.artistId.toString()],
+                keyType: ItunesLookupType.ID,
+                entity: ItunesEntityMusic.Album,
+                limit: options.albumLimit
+              })
+            );
 
-              // First index is always the collection, the remaining are songs of that collection
-              for (let index = 1; index < itunesSongs.resultCount; ++index) {
-                const song = itunesSongs.results[index];
+            // First index is always the collection, the remaining are songs of that collection
+            for (let index = 1; index < itunesSongs.resultCount; ++index) {
+              const song = itunesSongs.results[index];
 
-                songs.push(
-                  new Song({
-                    id: song.trackId,
-                    name: song.trackName,
-                    duration: song.trackTimeMillis,
-                    genre: song.primaryGenreName,
-                    track: song.trackNumber,
-                    artistId: artistResult.artistId,
-                    albumId: albumResult.collectionId
-                  })
-                );
-              }
+              //TODO filter out invalid songs prior
+              songs.push({
+                id: song.trackId || -1,
+                name: song.trackName || "",
+                duration: song.trackTimeMillis,
+                genre: song.primaryGenreName,
+                track: song.trackNumber,
+                artistId: artistResult.artistId,
+                albumId: albumResult.collectionId
+              });
             }
           }
         }
       }
+    }
 
-      resolve(
-        new SourceResult({
-          result: new MusicResult({
-            artists: artists,
-            albums: albums,
-            songs: songs
-          }),
-          source: this
-        })
-      );
+    return new SourceResult({
+      result: new MusicResult({
+        artists: artists,
+        albums: albums,
+        songs: songs
+      }),
+      source: this
     });
+  }
 
-  getAlbum = (options: MusicSearchOptions) =>
-    new Promise<SourceResult<MusicResult>>(async (resolve, reject) => {
-      const albums = Array<Album>();
-      const songs = Array<Song>();
+  async getArtistById(id: number): Promise<Artist | undefined> {
+    const artists = await lookupItunes(
+      new ItunesLookupOptions({
+        keyType: ItunesLookupType.ID,
+        keys: [id.toString()],
+        entity: ItunesEntityMusic.MusicArtist,
+        limit: 1
+      })
+    );
 
-      const itunesAlbums = await searchItunes(
-        new ItunesSearchOptions({
-          term: options.query,
-          entity: ItunesEntityMusic.Album,
-          limit: options.albumLimit
-        })
-      );
+    const artist: ItunesProperties | undefined =
+      artists.resultCount > 0 ? artists.results[0] : undefined;
 
-      // Lookup all songs with found album (collection) id
-      for (let albumResult of itunesAlbums.results) {
-        if (albumResult.collectionId) {
-          albums.push(
-            new Album({
-              id: albumResult.collectionId,
-              name: albumResult.collectionName,
-              trackCount: albumResult.trackCount
-            })
-          );
+    if (artist && artist.artistId && artist.artistName)
+      return {
+        id: artist.artistId,
+        name: artist.artistName
+      };
+    else return undefined;
+  }
 
-          const itunesSongs = await lookupItunes(
-            new ItunesLookupOptions({
-              keys: [albumResult.collectionId.toString()],
-              keyType: ItunesLookupType.ID,
-              entity: ItunesEntityMusic.Song,
-              limit: options.songLimit
-            })
-          );
+  async getAlbum(
+    options: MusicSearchOptions
+  ): Promise<SourceResult<MusicResult>> {
+    const albums = Array<Album>();
+    const songs = Array<Song>();
 
-          // First index is always the collection, the remaining are songs of that collection
-          for (let index = 1; index < itunesSongs.resultCount; ++index) {
-            const song = itunesSongs.results[index];
+    const itunesAlbums = await searchItunes(
+      new ItunesSearchOptions({
+        term: options.query,
+        entity: ItunesEntityMusic.Album,
+        limit: options.albumLimit
+      })
+    );
 
-            songs.push(
-              new Song({
-                id: song.trackId,
-                name: song.trackName,
-                duration: song.trackTimeMillis,
-                genre: song.primaryGenreName,
-                track: song.trackNumber,
-                albumId: albumResult.collectionId
-              })
-            );
-          }
-        }
-      }
+    // Lookup all songs with found album (collection) id
+    for (let albumResult of itunesAlbums.results) {
+      if (albumResult.collectionId && albumResult.collectionName) {
+        albums.push({
+          id: albumResult.collectionId,
+          name: albumResult.collectionName,
+          trackCount: albumResult.trackCount
+        });
 
-      resolve(
-        new SourceResult<MusicResult>({
-          result: new MusicResult({ albums: albums, songs: songs }),
-          source: this
-        })
-      );
-    });
-
-  getSong = (options: MusicSearchOptions) =>
-    new Promise<SourceResult<MusicResult>>(async (resolve, reject) => {
-      const songs = Array<Song>();
-
-      const itunesSongs = await searchItunes(
-        new ItunesSearchOptions({
-          term: options.query,
-          entity: ItunesEntityMusic.Song,
-          limit: options.songLimit
-        })
-      );
-
-      for (let song of itunesSongs.results)
-        songs.push(
-          new Song({
-            id: song.trackId,
-            name: song.trackName,
-            track: song.trackNumber,
-            duration: song.trackTimeMillis,
-            genre: song.primaryGenreName
+        const itunesSongs = await lookupItunes(
+          new ItunesLookupOptions({
+            keys: [albumResult.collectionId.toString()],
+            keyType: ItunesLookupType.ID,
+            entity: ItunesEntityMusic.Song,
+            limit: options.songLimit
           })
         );
 
-      resolve(
-        new SourceResult<MusicResult>({
-          result: new MusicResult({ songs: songs }),
-          source: this
-        })
-      );
+        // First index is always the collection, the remaining are songs of that collection
+        for (let index = 1; index < itunesSongs.resultCount; ++index) {
+          const song = itunesSongs.results[index];
+
+          //TODO filter out invalid songs prior
+          songs.push({
+            id: song.trackId || -1,
+            name: song.trackName || "",
+            duration: song.trackTimeMillis,
+            genre: song.primaryGenreName,
+            track: song.trackNumber,
+            albumId: albumResult.collectionId
+          });
+        }
+      }
+    }
+
+    return new SourceResult<MusicResult>({
+      result: new MusicResult({ albums: albums, songs: songs }),
+      source: this
     });
+  }
+
+  async getAlbumById(id: number): Promise<Album | undefined> {
+    const albums = await lookupItunes(
+      new ItunesLookupOptions({
+        keyType: ItunesLookupType.ID,
+        keys: [id.toString()],
+        entity: ItunesEntityMusic.Album,
+        limit: 1
+      })
+    );
+
+    const album: ItunesProperties | undefined =
+      albums.resultCount > 0 ? albums.results[0] : undefined;
+
+    if (album && album.collectionId && album.collectionName)
+      return {
+        id: album.collectionId,
+        name: album.collectionName,
+        artUrl: album.artworkUrl60
+          ? album.artworkUrl60.replace("60x60", "600x600")
+          : undefined
+      };
+    else return undefined;
+  }
+
+  async getSong(
+    options: MusicSearchOptions
+  ): Promise<SourceResult<MusicResult>> {
+    const artists: Array<Artist> = [];
+    const albums: Array<Album> = [];
+    const songs: Array<Song> = [];
+
+    // Array of [ItunesProperties] matches
+    // This filters out any results without the required properties
+    const itunesSongs: Array<ItunesProperties> = (await searchItunes(
+      new ItunesSearchOptions({
+        term: options.query,
+        entity: ItunesEntityMusic.Song,
+        limit: options.songLimit
+      })
+    )).results.filter((prop: ItunesProperties) => {
+      return prop.trackId && prop.trackName;
+    });
+
+    // Parsing song properties
+    for (let songResult of itunesSongs) {
+      const song: Song = {
+        id: songResult.trackId!,
+        name: songResult.trackName!,
+        track: songResult.trackNumber,
+        duration: songResult.trackTimeMillis,
+        genre: songResult.primaryGenreName
+      };
+
+      // TODO work with song.artistId directly
+      // Find song artist
+      // Assign possibly already existant artist
+      let artistResult = artists.find(
+        (artist: Artist) => artist.id == song.artistId
+      );
+
+      // If it's a new artist then asynchronously retrieve it
+      if (!artistResult && songResult.artistId)
+        artistResult = await this.getArtistById(songResult.artistId);
+
+      // TODO work with song.albumId directly
+      // Find song album
+      // Assign possibly already existant album
+      let albumResult = albums.find((album: Album) => album.id == song.albumId);
+
+      // If it's a new album then asynchronously retrieve it
+      if (!albumResult && songResult.collectionId)
+        albumResult = await this.getAlbumById(songResult.collectionId);
+
+      if (artistResult) {
+        song.artistId = artistResult.id;
+        artists.push(artistResult);
+      }
+
+      if (albumResult) {
+        song.albumId = albumResult.id;
+        albums.push(albumResult);
+      }
+
+      songs.push(song);
+    }
+
+    return new SourceResult<MusicResult>({
+      result: new MusicResult({
+        artists: artists,
+        albums: albums,
+        songs: songs
+      }),
+      source: this
+    });
+  }
 }

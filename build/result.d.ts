@@ -1,5 +1,5 @@
 import { Source } from "./sources/source";
-import { Artist, Album, Song } from "./music/music";
+import { Artist, Album, Song } from "./music";
 export declare class SourceResult<T> {
     readonly source: Source;
     readonly result: T;

@@ -6,8 +6,9 @@
   "types": "build/index.js",
   "scripts": {
     "build": "tsc",
+    "build-watch": "tsc --watch",
     "test": "npm run build; jest",
-    "testWatch": "clear; jest --watchAll"
+    "test-watch": "clear; jest --watchAll"
   },
   "repository": {
     "type": "git",
