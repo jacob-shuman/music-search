@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var search_1 = require("./search");
 exports.MusicSearch = search_1.MusicSearch;
-exports.MusicSearchOptions = search_1.MusicSearchOptions;
-var result_1 = require("./result");
-exports.SourceResult = result_1.SourceResult;
-exports.MusicResult = result_1.MusicResult;
+var source_1 = require("./sources/source");
+exports.SourceResult = source_1.SourceResult;
 var itunes_search_1 = require("./sources/itunes-search");
 exports.ItunesSearchSource = itunes_search_1.ItunesSearchSource;
+var music_1 = require("./music");
+exports.MusicResult = music_1.MusicResult;

@@ -1,85 +1,64 @@
-import { Source } from "./sources/source";
-import { SourceResult, MusicResult } from "./result";
-import { Artist, Album, Song } from "./music";
+import { Source, SourceResult } from "./sources/source";
+import { MusicResult } from "./music";
 
-export class MusicSearchOptions {
+// TODO: Add total artist/album/song limit
+export interface MusicSearchOptions {
   // String search query to provide to all sources
   query: string;
 
   // Lists all sources to be used in search (if none are specified then all default sources will be used)
-  sources: Array<Source>;
+  sources?: Array<Source>;
 
   // Sets maximum number of artists per search (NOT TOTAL NUMBER OF ARTITS)
-  artistLimit?: number;
+  artistSourceLimit?: number;
 
   // Sets maximum number of albums per search (NOT TOTAL NUMBER OF ALBUMS)
-  albumLimit?: number;
+  albumSourceLimit?: number;
 
   // Sets maximum number of songs per search (NOT TOTAL NUMBER OF SONGS)
-  songLimit?: number;
-
-  constructor(options: {
-    query: string;
-    sources?: Array<Source>;
-    artistLimit?: number;
-    albumLimit?: number;
-    songLimit?: number;
-  }) {
-    // this.sources = options.sources || Sources.values;
-    this.query = options.query;
-    this.sources = options.sources || [];
-    this.artistLimit = options.artistLimit;
-    this.albumLimit = options.albumLimit;
-    this.songLimit = options.songLimit;
-  }
+  songSourceLimit?: number;
 }
 
-export class MusicSearch {
-  static options?: MusicSearchOptions;
-
-  static getArtist(
+export namespace MusicSearch {
+  export const getArtist = async (
     options: MusicSearchOptions
-  ): Promise<Array<SourceResult<MusicResult>>> {
-    return new Promise(async (resolve, reject) => {
-      let searchOptions: MusicSearchOptions = options || this.options;
-      let results: Array<SourceResult<MusicResult>> = [];
+  ): Promise<Array<SourceResult<MusicResult>>> => {
+    let results: Array<SourceResult<MusicResult>> = [];
 
-      for (let index = 0; index < searchOptions.sources.length; index++)
-        results.push(
-          await searchOptions.sources[index].getArtist(searchOptions)
-        );
+    // TODO: Set [options.sources] to default sources
+    if (!options.sources) options.sources = [];
 
-      resolve(results);
-    });
-  }
+    for (let index = 0; index < options.sources.length; index++)
+      results.push(await options.sources[index].getArtist(options));
 
-  static getAlbum(
+    return results;
+  };
+
+  export const getAlbum = async (
     options: MusicSearchOptions
-  ): Promise<Array<SourceResult<MusicResult>>> {
-    return new Promise(async (resolve, Album) => {
-      let searchOptions: MusicSearchOptions = options || this.options;
-      let results: Array<SourceResult<MusicResult>> = [];
+  ): Promise<Array<SourceResult<MusicResult>>> => {
+    let results: Array<SourceResult<MusicResult>> = [];
 
-      for (let index = 0; index < searchOptions.sources.length; index++)
-        results.push(
-          await searchOptions.sources[index].getAlbum(searchOptions)
-        );
+    // TODO: Set [options.sources] to default sources
+    if (!options.sources) options.sources = [];
 
-      resolve(results);
-    });
-  }
+    for (let index = 0; index < options.sources.length; index++)
+      results.push(await options.sources[index].getAlbum(options));
 
-  static getSong(
+    return results;
+  };
+
+  export const getSong = async (
     options: MusicSearchOptions
-  ): Promise<Array<SourceResult<MusicResult>>> {
-    return new Promise(async (resolve, reject) => {
-      let searchOptions: MusicSearchOptions = options || this.options;
-      let results: Array<SourceResult<MusicResult>> = [];
+  ): Promise<Array<SourceResult<MusicResult>>> => {
+    let results: Array<SourceResult<MusicResult>> = [];
 
-      for (let index = 0; index < searchOptions.sources.length; index++)
-        results.push(await searchOptions.sources[index].getSong(searchOptions));
+    // TODO: Set [options.sources] to default sources
+    if (!options.sources) options.sources = [];
 
-      resolve(results);
-    });
-  }
+    for (let index = 0; index < options.sources.length; index++)
+      results.push(await options.sources[index].getSong(options));
+
+    return results;
+  };
 }

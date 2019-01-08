@@ -1,6 +1,5 @@
-import { Artist, Album } from "../music";
-import { Source } from "./source";
-import { SourceResult, MusicResult } from "../result";
+import { Artist, Album, MusicResult } from "../music";
+import { Source, SourceResult } from "./source";
 import { MusicSearchOptions } from "../search";
 export declare class ItunesSearchSource implements Source {
     name: string;

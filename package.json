@@ -26,13 +26,13 @@
   },
   "homepage": "https://github.com/jacob-shuman/music-search#readme",
   "devDependencies": {
-    "@types/jest": "^23.3.10",
+    "@types/jest": "^23.3.12",
     "@types/node": "^10.12.18",
     "jest": "^23.6.0",
     "ts-jest": "^23.10.5",
     "typescript": "^3.2.2"
   },
   "dependencies": {
-    "node-itunes-search": "^1.1.0"
+    "node-itunes-search": "file:../node-itunes-search"
   }
 }

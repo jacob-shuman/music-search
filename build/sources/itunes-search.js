@@ -7,9 +7,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const result_1 = require("../result");
-const node_itunes_search_1 = require("node-itunes-search");
+const music_1 = require("../music");
+const source_1 = require("./source");
+const node_itunes_search_1 = __importDefault(require("node-itunes-search"));
 class ItunesSearchSource {
     constructor() {
         this.name = "Itunes";
@@ -19,23 +23,23 @@ class ItunesSearchSource {
             const artists = Array();
             const albums = Array();
             const songs = Array();
-            const itunesArtists = yield node_itunes_search_1.searchItunes(new node_itunes_search_1.ItunesSearchOptions({
+            const itunesArtists = yield node_itunes_search_1.default.search({
                 term: options.query,
-                entity: node_itunes_search_1.ItunesEntityMusic.MusicArtist,
-                limit: options.artistLimit
-            }));
+                entity: node_itunes_search_1.default.Entity.Music.MusicArtist,
+                limit: options.artistSourceLimit
+            });
             for (let artistResult of itunesArtists.results) {
                 if (artistResult.artistId && artistResult.artistName) {
                     artists.push({
                         id: artistResult.artistId,
                         name: artistResult.artistName
                     });
-                    const itunesAlbums = yield node_itunes_search_1.lookupItunes(new node_itunes_search_1.ItunesLookupOptions({
+                    const itunesAlbums = yield node_itunes_search_1.default.lookup({
                         keys: [artistResult.artistId.toString()],
-                        keyType: node_itunes_search_1.ItunesLookupType.ID,
-                        entity: node_itunes_search_1.ItunesEntityMusic.Album,
-                        limit: options.albumLimit
-                    }));
+                        keyType: node_itunes_search_1.default.LookupType.ID,
+                        entity: node_itunes_search_1.default.Entity.Music.Album,
+                        limit: options.albumSourceLimit
+                    });
                     for (let albumResult of itunesAlbums.results) {
                         if (albumResult.collectionId) {
                             albums.push({
@@ -44,12 +48,12 @@ class ItunesSearchSource {
                                 trackCount: albumResult.trackCount,
                                 artistId: artistResult.artistId
                             });
-                            const itunesSongs = yield node_itunes_search_1.lookupItunes(new node_itunes_search_1.ItunesLookupOptions({
+                            const itunesSongs = yield node_itunes_search_1.default.lookup({
                                 keys: [artistResult.artistId.toString()],
-                                keyType: node_itunes_search_1.ItunesLookupType.ID,
-                                entity: node_itunes_search_1.ItunesEntityMusic.Album,
-                                limit: options.albumLimit
-                            }));
+                                keyType: node_itunes_search_1.default.LookupType.ID,
+                                entity: node_itunes_search_1.default.Entity.Music.Album,
+                                limit: options.albumSourceLimit
+                            });
                             // First index is always the collection, the remaining are songs of that collection
                             for (let index = 1; index < itunesSongs.resultCount; ++index) {
                                 const song = itunesSongs.results[index];
@@ -68,8 +72,8 @@ class ItunesSearchSource {
                     }
                 }
             }
-            return new result_1.SourceResult({
-                result: new result_1.MusicResult({
+            return new source_1.SourceResult({
+                result: new music_1.MusicResult({
                     artists: artists,
                     albums: albums,
                     songs: songs
@@ -80,12 +84,12 @@ class ItunesSearchSource {
     }
     getArtistById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const artists = yield node_itunes_search_1.lookupItunes(new node_itunes_search_1.ItunesLookupOptions({
-                keyType: node_itunes_search_1.ItunesLookupType.ID,
+            const artists = yield node_itunes_search_1.default.lookup({
+                keyType: node_itunes_search_1.default.LookupType.ID,
                 keys: [id.toString()],
-                entity: node_itunes_search_1.ItunesEntityMusic.MusicArtist,
+                entity: node_itunes_search_1.default.Entity.Music.MusicArtist,
                 limit: 1
-            }));
+            });
             const artist = artists.resultCount > 0 ? artists.results[0] : undefined;
             if (artist && artist.artistId && artist.artistName)
                 return {
@@ -100,11 +104,11 @@ class ItunesSearchSource {
         return __awaiter(this, void 0, void 0, function* () {
             const albums = Array();
             const songs = Array();
-            const itunesAlbums = yield node_itunes_search_1.searchItunes(new node_itunes_search_1.ItunesSearchOptions({
+            const itunesAlbums = yield node_itunes_search_1.default.search({
                 term: options.query,
-                entity: node_itunes_search_1.ItunesEntityMusic.Album,
-                limit: options.albumLimit
-            }));
+                entity: node_itunes_search_1.default.Entity.Music.Album,
+                limit: options.albumSourceLimit
+            });
             // Lookup all songs with found album (collection) id
             for (let albumResult of itunesAlbums.results) {
                 if (albumResult.collectionId && albumResult.collectionName) {
@@ -113,12 +117,12 @@ class ItunesSearchSource {
                         name: albumResult.collectionName,
                         trackCount: albumResult.trackCount
                     });
-                    const itunesSongs = yield node_itunes_search_1.lookupItunes(new node_itunes_search_1.ItunesLookupOptions({
+                    const itunesSongs = yield node_itunes_search_1.default.lookup({
                         keys: [albumResult.collectionId.toString()],
-                        keyType: node_itunes_search_1.ItunesLookupType.ID,
-                        entity: node_itunes_search_1.ItunesEntityMusic.Song,
-                        limit: options.songLimit
-                    }));
+                        keyType: node_itunes_search_1.default.LookupType.ID,
+                        entity: node_itunes_search_1.default.Entity.Music.Song,
+                        limit: options.songSourceLimit
+                    });
                     // First index is always the collection, the remaining are songs of that collection
                     for (let index = 1; index < itunesSongs.resultCount; ++index) {
                         const song = itunesSongs.results[index];
@@ -134,28 +138,26 @@ class ItunesSearchSource {
                     }
                 }
             }
-            return new result_1.SourceResult({
-                result: new result_1.MusicResult({ albums: albums, songs: songs }),
+            return new source_1.SourceResult({
+                result: new music_1.MusicResult({ albums: albums, songs: songs }),
                 source: this
             });
         });
     }
     getAlbumById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const albums = yield node_itunes_search_1.lookupItunes(new node_itunes_search_1.ItunesLookupOptions({
-                keyType: node_itunes_search_1.ItunesLookupType.ID,
+            const albums = yield node_itunes_search_1.default.lookup({
+                keyType: node_itunes_search_1.default.LookupType.ID,
                 keys: [id.toString()],
-                entity: node_itunes_search_1.ItunesEntityMusic.Album,
+                entity: node_itunes_search_1.default.Entity.Music.Album,
                 limit: 1
-            }));
+            });
             const album = albums.resultCount > 0 ? albums.results[0] : undefined;
             if (album && album.collectionId && album.collectionName)
                 return {
                     id: album.collectionId,
                     name: album.collectionName,
-                    artUrl: album.artworkUrl60
-                        ? album.artworkUrl60.replace("60x60", "600x600")
-                        : undefined
+                    artUrl: album.artworkUrl60 ? album.artworkUrl60.replace("60x60", "600x600") : undefined
                 };
             else
                 return undefined;
@@ -168,11 +170,11 @@ class ItunesSearchSource {
             const songs = [];
             // Array of [ItunesProperties] matches
             // This filters out any results without the required properties
-            const itunesSongs = (yield node_itunes_search_1.searchItunes(new node_itunes_search_1.ItunesSearchOptions({
+            const itunesSongs = (yield node_itunes_search_1.default.search({
                 term: options.query,
-                entity: node_itunes_search_1.ItunesEntityMusic.Song,
-                limit: options.songLimit
-            }))).results.filter((prop) => {
+                entity: node_itunes_search_1.default.Entity.Music.Song,
+                limit: options.songSourceLimit
+            })).results.filter((prop) => {
                 return prop.trackId && prop.trackName;
             });
             // Parsing song properties
@@ -200,16 +202,23 @@ class ItunesSearchSource {
                     albumResult = yield this.getAlbumById(songResult.collectionId);
                 if (artistResult) {
                     song.artistId = artistResult.id;
-                    artists.push(artistResult);
+                    // Check if artist with id already exists
+                    if (!artists.some((artist) => artistResult.id == artist.id))
+                        artists.push(artistResult);
                 }
                 if (albumResult) {
+                    // Applying artist id to album if artist was found
+                    if (artistResult)
+                        albumResult.artistId = artistResult.id;
                     song.albumId = albumResult.id;
-                    albums.push(albumResult);
+                    // Check if artist with id already exists
+                    if (!albums.some((album) => albumResult.id == album.id))
+                        albums.push(albumResult);
                 }
                 songs.push(song);
             }
-            return new result_1.SourceResult({
-                result: new result_1.MusicResult({
+            return new source_1.SourceResult({
+                result: new music_1.MusicResult({
                     artists: artists,
                     albums: albums,
                     songs: songs
