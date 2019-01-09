@@ -49,9 +49,9 @@ class ItunesSearchSource {
                                 artistId: artistResult.artistId
                             });
                             const itunesSongs = yield node_itunes_search_1.default.lookup({
-                                keys: [artistResult.artistId.toString()],
+                                keys: [albumResult.collectionId.toString()],
                                 keyType: node_itunes_search_1.default.LookupType.ID,
-                                entity: node_itunes_search_1.default.Entity.Music.Album,
+                                entity: node_itunes_search_1.default.Entity.Music.Song,
                                 limit: options.albumSourceLimit
                             });
                             // First index is always the collection, the remaining are songs of that collection
@@ -102,44 +102,60 @@ class ItunesSearchSource {
     }
     getAlbum(options) {
         return __awaiter(this, void 0, void 0, function* () {
+            const artists = Array();
             const albums = Array();
             const songs = Array();
-            const itunesAlbums = yield node_itunes_search_1.default.search({
+            const itunesAlbums = (yield node_itunes_search_1.default.search({
                 term: options.query,
                 entity: node_itunes_search_1.default.Entity.Music.Album,
                 limit: options.albumSourceLimit
+            })).results.filter((prop) => {
+                return prop.collectionId && prop.collectionName;
             });
             // Lookup all songs with found album (collection) id
-            for (let albumResult of itunesAlbums.results) {
-                if (albumResult.collectionId && albumResult.collectionName) {
-                    albums.push({
-                        id: albumResult.collectionId,
-                        name: albumResult.collectionName,
-                        trackCount: albumResult.trackCount
-                    });
-                    const itunesSongs = yield node_itunes_search_1.default.lookup({
-                        keys: [albumResult.collectionId.toString()],
-                        keyType: node_itunes_search_1.default.LookupType.ID,
-                        entity: node_itunes_search_1.default.Entity.Music.Song,
-                        limit: options.songSourceLimit
-                    });
-                    // First index is always the collection, the remaining are songs of that collection
-                    for (let index = 1; index < itunesSongs.resultCount; ++index) {
-                        const song = itunesSongs.results[index];
-                        //TODO filter out invalid songs prior
-                        songs.push({
-                            id: song.trackId || -1,
-                            name: song.trackName || "",
-                            duration: song.trackTimeMillis,
-                            genre: song.primaryGenreName,
-                            track: song.trackNumber,
-                            albumId: albumResult.collectionId
-                        });
-                    }
+            for (let albumResult of itunesAlbums) {
+                const album = {
+                    id: albumResult.collectionId,
+                    name: albumResult.collectionName,
+                    trackCount: albumResult.trackCount
+                };
+                // TODO work with song.artistId directly
+                // Find song artist
+                // Assign possibly already existant artist
+                let artistResult = artists.find((artist) => artist.id == albumResult.artistId);
+                // If it's a new artist then asynchronously retrieve it
+                if (!artistResult && albumResult.artistId)
+                    artistResult = yield this.getArtistById(albumResult.artistId);
+                if (artistResult) {
+                    album.artistId = artistResult.id;
+                    // Check if artist with id already exists
+                    if (!artists.some((artist) => artistResult.id == artist.id))
+                        artists.push(artistResult);
                 }
+                const itunesSongs = yield node_itunes_search_1.default.lookup({
+                    keys: [albumResult.collectionId.toString()],
+                    keyType: node_itunes_search_1.default.LookupType.ID,
+                    entity: node_itunes_search_1.default.Entity.Music.Song,
+                    limit: options.songSourceLimit
+                });
+                // First index is always the collection, the remaining are songs of that collection
+                for (let index = 1; index < itunesSongs.resultCount; ++index) {
+                    const song = itunesSongs.results[index];
+                    //TODO filter out invalid songs prior
+                    songs.push({
+                        id: song.trackId || -1,
+                        name: song.trackName || "",
+                        duration: song.trackTimeMillis,
+                        genre: song.primaryGenreName,
+                        track: song.trackNumber,
+                        artistId: albumResult.artistId,
+                        albumId: albumResult.collectionId
+                    });
+                }
+                albums.push(album);
             }
             return new source_1.SourceResult({
-                result: new music_1.MusicResult({ albums: albums, songs: songs }),
+                result: new music_1.MusicResult({ artists: artists, albums: albums, songs: songs }),
                 source: this
             });
         });
@@ -189,14 +205,14 @@ class ItunesSearchSource {
                 // TODO work with song.artistId directly
                 // Find song artist
                 // Assign possibly already existant artist
-                let artistResult = artists.find((artist) => artist.id == song.artistId);
+                let artistResult = artists.find((artist) => artist.id == songResult.artistId);
                 // If it's a new artist then asynchronously retrieve it
                 if (!artistResult && songResult.artistId)
                     artistResult = yield this.getArtistById(songResult.artistId);
                 // TODO work with song.albumId directly
                 // Find song album
                 // Assign possibly already existant album
-                let albumResult = albums.find((album) => album.id == song.albumId);
+                let albumResult = albums.find((album) => album.id == songResult.collectionId);
                 // If it's a new album then asynchronously retrieve it
                 if (!albumResult && songResult.collectionId)
                     albumResult = yield this.getAlbumById(songResult.collectionId);

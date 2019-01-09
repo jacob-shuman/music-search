@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "build-watch": "tsc --watch",
-    "test": "npm run build; jest",
+    "test": "npm run build; jest --detectOpenHandles",
     "test-watch": "clear; jest --watchAll"
   },
   "repository": {
@@ -33,6 +33,6 @@
     "typescript": "^3.2.2"
   },
   "dependencies": {
-    "node-itunes-search": "file:../node-itunes-search"
+    "node-itunes-search": "^1.2.1"
   }
 }

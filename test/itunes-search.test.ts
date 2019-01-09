@@ -1,15 +1,20 @@
-import { MusicSearch, SourceResult, MusicResult, ItunesSearchSource } from "../src/index";
+// 1 Minute Test Limit
+jest.setTimeout(1000 * 60);
+
+import {
+  MusicSearch,
+  SourceResult,
+  MusicResult,
+  ItunesSearchSource,
+  MusicSearchOptions
+} from "../src/index";
 
 describe("Source", () => {
   describe("Itunes", () => {
     test("Artist Search", async () => {
-      expect.assertions(1);
-
       const options = {
         query: "Queens of the Stone Age",
-        artistLimit: 1,
-        albumLimit: 10,
-        songLimit: 15,
+        artistSourceLimit: 1,
         sources: [new ItunesSearchSource()]
       };
 
@@ -19,11 +24,9 @@ describe("Source", () => {
     });
 
     test("Album Search", async () => {
-      expect.assertions(1);
-
       const options = {
-        query: "Villains Qotsa",
-        albumLimit: 1,
+        query: "Villains",
+        albumSourceLimit: 2,
         sources: [new ItunesSearchSource()]
       };
 
@@ -33,17 +36,15 @@ describe("Source", () => {
     });
 
     test("Song Search", async () => {
-      expect.assertions(1);
-
       const options = {
         query: "Queen Bohemian Rhapsody",
-        songLimit: 1,
+        songSourceLimit: 1,
         sources: [new ItunesSearchSource()]
       };
 
       const results = await MusicSearch.getSong(options);
 
-      expect(results.length).resolves.toBeGreaterThan(0);
+      expect(results.length).toBeGreaterThan(0);
     });
   });
 });
