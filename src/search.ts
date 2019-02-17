@@ -1,5 +1,5 @@
-import { Source, SourceResult } from "./sources/source";
-import { MusicResult } from "./music";
+import {Source, SourceResult} from "./sources/source";
+import {MusicResult} from "./music";
 
 // TODO: Add total artist/album/song limit
 export interface MusicSearchOptions {
@@ -9,7 +9,7 @@ export interface MusicSearchOptions {
   // Lists all sources to be used in search (if none are specified then all default sources will be used)
   sources?: Array<Source>;
 
-  // Sets maximum number of artists per search (NOT TOTAL NUMBER OF ARTITS)
+  // Sets maximum number of artists per search (NOT TOTAL NUMBER OF ARTISTS)
   artistSourceLimit?: number;
 
   // Sets maximum number of albums per search (NOT TOTAL NUMBER OF ALBUMS)

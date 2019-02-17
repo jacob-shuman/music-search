@@ -1,16 +1,14 @@
-import { MusicResult } from "../music";
+import {MusicResult} from "../music";
 
 // Sources
-import { ItunesSearchSource } from "./itunes-search";
-import { MusicSearchOptions } from "../search";
+import {MusicSearchOptions} from "../search";
+import {ItunesSearchSource} from "./itunes/itunesSource";
 
 export interface Source {
   // Name of source (Ex: "Itunes", "Sportify", "Last.FM")
   name: string;
 
-  getArtist: (
-    options: MusicSearchOptions
-  ) => Promise<SourceResult<MusicResult>>;
+  getArtist: (options: MusicSearchOptions) => Promise<SourceResult<MusicResult>>;
   getAlbum: (options: MusicSearchOptions) => Promise<SourceResult<MusicResult>>;
   getSong: (options: MusicSearchOptions) => Promise<SourceResult<MusicResult>>;
 }
@@ -25,7 +23,7 @@ export class SourceResult<T> {
   // Success state of the source action
   readonly success: boolean;
 
-  constructor(options: { result: T; source: Source; success?: boolean }) {
+  constructor(options: {result: T; source: Source; success?: boolean}) {
     this.source = options.source;
     this.result = options.result;
     this.success = options.success || false;

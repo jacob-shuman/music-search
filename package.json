@@ -8,7 +8,7 @@
     "build": "tsc",
     "build-watch": "tsc --watch",
     "test": "npm run build; jest --detectOpenHandles",
-    "test-watch": "clear; jest --watchAll"
+    "test-watch": "npm run build; jest --watchAll"
   },
   "repository": {
     "type": "git",

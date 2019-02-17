@@ -32,16 +32,10 @@ export interface Song {
 
 export class MusicResult {
   readonly artists: Array<Artist>;
-
   readonly albums: Array<Album>;
-
   readonly songs: Array<Song>;
 
-  constructor(options: {
-    artists?: Array<Artist>;
-    albums?: Array<Album>;
-    songs?: Array<Song>;
-  }) {
+  constructor(options: {artists?: Array<Artist>; albums?: Array<Album>; songs?: Array<Song>}) {
     this.artists = options.artists || [];
     this.albums = options.albums || [];
     this.songs = options.songs || [];
