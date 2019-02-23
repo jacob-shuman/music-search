@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class MusicResult {
     constructor(options) {
+        this.source = options.source;
         this.artists = options.artists || [];
         this.albums = options.albums || [];
         this.songs = options.songs || [];

@@ -1,3 +1,4 @@
+import { Source } from "./sources/source";
 export interface Artist {
     id: number;
     name: string;
@@ -19,11 +20,32 @@ export interface Song {
     artistId?: number;
     albumId?: number;
 }
+export interface MusicQuery {
+    query: string;
+    sources?: Source[];
+    artistSourceLimit?: number;
+    albumSourceLimit?: number;
+    songSourceLimit?: number;
+}
+export interface ArtistMusicQuery extends MusicQuery {
+    artistSearchLimit?: number;
+    albumSearchLimit?: number;
+    songSearchLimit?: number;
+}
+export interface AlbumMusicQuery extends MusicQuery {
+    albumSearchLimit?: number;
+    songSearchLimit?: number;
+}
+export interface SongMusicQuery extends MusicQuery {
+    songSearchLimit?: number;
+}
 export declare class MusicResult {
+    readonly source?: Source;
     readonly artists: Array<Artist>;
     readonly albums: Array<Album>;
     readonly songs: Array<Song>;
     constructor(options: {
+        source?: Source;
         artists?: Array<Artist>;
         albums?: Array<Album>;
         songs?: Array<Song>;

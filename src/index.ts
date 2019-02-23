@@ -1,6 +1,15 @@
-export {MusicSearch, MusicSearchOptions} from "./search";
+export {MusicSearch} from "./search";
 
-export {Source, SourceResult} from "./sources/source";
+export {Source} from "./sources/source";
 export {ItunesSearchSource} from "./sources/itunes/itunesSource";
 
-export {Artist, Album, Song, MusicResult} from "./music";
+export {
+  Artist,
+  Album,
+  Song,
+  MusicQuery,
+  ArtistMusicQuery,
+  AlbumMusicQuery,
+  SongMusicQuery,
+  MusicResult
+} from "./music";

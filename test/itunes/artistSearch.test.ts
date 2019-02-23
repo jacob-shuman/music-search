@@ -1,28 +1,21 @@
 // 1 Minute Test Limit
 jest.setTimeout(1000 * 60);
 
-import {
-  MusicSearch,
-  SourceResult,
-  MusicResult,
-  ItunesSearchSource,
-  MusicSearchOptions
-} from "../../build/index";
+import {MusicSearch, ArtistMusicQuery, MusicResult, ItunesSearchSource} from "../../build/index";
 
 describe("Source", () => {
   describe("Itunes", () => {
     test("Artist Search", async () => {
-      const options: MusicSearchOptions = {
-        query: "Queens of the Stone Age",
-        artistSourceLimit: 2,
-        albumSourceLimit: 2,
-        songSourceLimit: 1,
+      const options: ArtistMusicQuery = {
+        query: "Queen",
+        artistSearchLimit: 1,
+        albumSearchLimit: 1,
         sources: [new ItunesSearchSource()]
       };
 
-      const results = await MusicSearch.getArtist(options);
+      const sourceResults: MusicResult[] = await MusicSearch.getArtist(options);
 
-      expect(results.length).toBeGreaterThan(0);
+      expect(sourceResults.length).toBeGreaterThan(0);
     });
   });
 });

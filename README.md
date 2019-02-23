@@ -19,14 +19,14 @@ const musicSearch = require("music-search");
 #### ES6
 
 ```ts
-import { MusicSearch } from "music-search";
+import {MusicSearch} from "music-search";
 ```
 
 ## Available Sources
 
 | Name              | Implemented |
 | :---------------- | ----------: |
-| iTunes Search API |         Yes |
+| iTunes Search API | In Progress |
 | Spotify API       |          No |
 
 ## API
