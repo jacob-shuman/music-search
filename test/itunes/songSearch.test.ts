@@ -19,4 +19,11 @@ describe("Source", () => {
   });
 });
 
-// there was a sheep herder and he crose\sed a road with 2 sheep and a wolf  and he arrives a t a bridge how does get them accross the bridge without the wolf eating the sheep tell me how?
+// Riddle me this...
+
+// There was a sheep herder and he crosesed a road with 2 sheep and a wolf.
+// He arrives at a bridge.
+// He can move one animal at a time.
+// The wolf will eat the sheep if left alone with either of them.
+
+// How does get the animals accross the bridge without the wolf eating the sheep?
