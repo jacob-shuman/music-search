@@ -1,6 +1,6 @@
-import {MusicQuery, MusicResult} from "./music";
+import {MusicArtistQuery, MusicAlbumQuery, MusicSongQuery, MusicResult} from "./music";
 
-export async function searchArtist(options: MusicQuery): Promise<MusicResult[]> {
+export async function searchArtist(options: MusicArtistQuery): Promise<MusicResult[]> {
   let results: MusicResult[] = [];
 
   // TODO: Set [options.sources] to default sources
@@ -13,7 +13,7 @@ export async function searchArtist(options: MusicQuery): Promise<MusicResult[]> 
   return results;
 }
 
-export async function searchAlbum(options: MusicQuery): Promise<MusicResult[]> {
+export async function searchAlbum(options: MusicAlbumQuery): Promise<MusicResult[]> {
   let results: MusicResult[] = [];
 
   // TODO: Set [options.sources] to default sources
@@ -25,7 +25,7 @@ export async function searchAlbum(options: MusicQuery): Promise<MusicResult[]> {
   return results;
 }
 
-export async function searchSong(options: MusicQuery): Promise<MusicResult[]> {
+export async function searchSong(options: MusicSongQuery): Promise<MusicResult[]> {
   let results: MusicResult[] = [];
 
   // TODO: Set [options.sources] to default sources

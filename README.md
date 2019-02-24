@@ -13,6 +13,7 @@
   - [Interfaces](./docs/interfaces.md)
   - [Namespaces](./docs/namespaces.md)
   - [Classes](./docs/classes.md)
+  - [Functions](./docs/functions.md)
 
 <a name="installation">
 
@@ -68,3 +69,4 @@ import MusicSearch from "music-search";
 - [**Interfaces**](./docs/interfaces.md)
 - [**Namespaces**](./docs/namespaces.md)
 - [**Classes**](./docs/classes.md)
+- [**Functions**](./docs/functions.md)

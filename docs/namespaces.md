@@ -2,6 +2,12 @@
 
 # Namespaces
 
+### `MusicSources`
+
+| Type        | Model                | Namespace Alias |
+| ----------- | -------------------- | --------------- |
+| MusicSource | `ItunesSearchSource` | `ITUNES_SEARCH` |
+
 ### `MusicSearch`
 
 Everything from this package can be found either by manually importing each class/interface/enum/function etc. OR by using the default "`MusicSearch`" namespace.
