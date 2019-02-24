@@ -1,6 +1,8 @@
 import Itunes from "node-itunes-search";
 
-import {MusicArtist, MusicArtistQuery, MusicResult} from "../../music";
+import {MusicArtist} from "../../music";
+import {MusicArtistQuery} from "../../query";
+import {MusicResult} from "../../result";
 import {ItunesSearchSource} from "./itunesSource";
 
 export async function getArtist(options: MusicArtistQuery): Promise<MusicResult> {

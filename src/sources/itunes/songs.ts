@@ -1,6 +1,8 @@
 import Itunes from "node-itunes-search";
 
-import {MusicArtist, MusicAlbum, MusicSongQuery, MusicResult} from "../../music";
+import {MusicArtist, MusicAlbum} from "../../music";
+import {MusicSongQuery} from "../../query";
+import {MusicResult} from "../../result";
 import {ItunesSearchSource} from "./itunesSource";
 
 import {getArtistById} from "./artists";

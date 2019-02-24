@@ -1,4 +1,5 @@
-import { MusicArtistQuery, MusicAlbumQuery, MusicSongQuery, MusicResult } from "../music";
+import { MusicArtistQuery, MusicAlbumQuery, MusicSongQuery } from "../query";
+import { MusicResult } from "../result";
 import { ItunesSearchSource } from "./itunes/itunesSource";
 export declare namespace MusicSources {
     type ITUNES_SEARCH = ItunesSearchSource;

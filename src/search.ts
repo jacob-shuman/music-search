@@ -1,4 +1,5 @@
-import {MusicArtistQuery, MusicAlbumQuery, MusicSongQuery, MusicResult} from "./music";
+import {MusicArtistQuery, MusicAlbumQuery, MusicSongQuery} from "./query";
+import {MusicResult} from "./result";
 
 export async function searchArtist(options: MusicArtistQuery): Promise<MusicResult[]> {
   let results: MusicResult[] = [];
