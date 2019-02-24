@@ -1,17 +1,17 @@
-import { Source } from "./sources/source";
-export interface Artist {
+import { MusicSource } from "./sources/source";
+export interface MusicArtist {
     id: number;
     name: string;
     artUrl?: string;
 }
-export interface Album {
+export interface MusicAlbum {
     id: number;
     name: string;
     trackCount?: number;
     artUrl?: string;
     artistId?: number;
 }
-export interface Song {
+export interface MusicSong {
     id: number;
     name: string;
     track?: number;
@@ -22,38 +22,38 @@ export interface Song {
 }
 export interface MusicQuery {
     query: string;
-    sources?: Source[];
+    sources?: MusicSource[];
     artistSourceLimit?: number;
     albumSourceLimit?: number;
     songSourceLimit?: number;
 }
-export interface ArtistMusicQuery extends MusicQuery {
+export interface MusicArtistQuery extends MusicQuery {
     artistSearchLimit?: number;
     albumSearchLimit?: number;
     songSearchLimit?: number;
 }
-export interface AlbumMusicQuery extends MusicQuery {
+export interface MusicAlbumQuery extends MusicQuery {
     albumSearchLimit?: number;
     songSearchLimit?: number;
 }
-export interface SongMusicQuery extends MusicQuery {
+export interface MusicSongQuery extends MusicQuery {
     songSearchLimit?: number;
 }
 export declare class MusicResult {
-    readonly source?: Source;
-    readonly artists: Array<Artist>;
-    readonly albums: Array<Album>;
-    readonly songs: Array<Song>;
+    readonly artists: MusicArtist[];
+    readonly albums: MusicAlbum[];
+    readonly songs: MusicSong[];
+    readonly source?: MusicSource;
     constructor(options: {
-        source?: Source;
-        artists?: Array<Artist>;
-        albums?: Array<Album>;
-        songs?: Array<Song>;
+        artists?: MusicArtist[];
+        albums?: MusicAlbum[];
+        songs?: MusicSong[];
+        source?: MusicSource;
     });
-    getArtist(id: number): Artist | undefined;
-    getArtistAlbums(id: number): Array<Album>;
-    getArtistSongs(id: number): Array<Song>;
-    getAlbum(id: number): Album | undefined;
-    getAlbumSongs(id: number): Array<Song>;
-    getSong(id: number): Song | undefined;
+    getArtist(id: number): MusicArtist | undefined;
+    getArtistAlbums(id: number): MusicAlbum[];
+    getArtistSongs(id: number): MusicSong[];
+    getAlbum(id: number): MusicAlbum | undefined;
+    getAlbumSongs(id: number): MusicSong[];
+    getSong(id: number): MusicSong | undefined;
 }

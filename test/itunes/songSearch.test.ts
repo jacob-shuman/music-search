@@ -1,12 +1,12 @@
 // 1 Minute Test Limit
 jest.setTimeout(1000 * 60);
 
-import {MusicSearch, SongMusicQuery, MusicResult, ItunesSearchSource} from "../../build/index";
+import {MusicSearch, MusicSongQuery, MusicResult, ItunesSearchSource} from "../../build/index";
 
 describe("Source", () => {
   describe("Itunes", () => {
     test("Song Search", async () => {
-      const options: SongMusicQuery = {
+      const options: MusicSongQuery = {
         query: "Queen Bohemian Rhapsody",
         songSearchLimit: 1,
         sources: [new ItunesSearchSource()]

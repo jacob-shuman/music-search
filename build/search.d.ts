@@ -1,6 +1,4 @@
-import { MusicQuery, MusicResult } from "./music";
-export declare namespace MusicSearch {
-    const getArtist: (options: MusicQuery) => Promise<MusicResult[]>;
-    const getAlbum: (options: MusicQuery) => Promise<MusicResult[]>;
-    const getSong: (options: MusicQuery) => Promise<MusicResult[]>;
-}
+import { MusicArtistQuery, MusicAlbumQuery, MusicSongQuery, MusicResult } from "./music";
+export declare function searchArtist(options: MusicArtistQuery): Promise<MusicResult[]>;
+export declare function searchAlbum(options: MusicAlbumQuery): Promise<MusicResult[]>;
+export declare function searchSong(options: MusicSongQuery): Promise<MusicResult[]>;

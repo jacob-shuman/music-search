@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class MusicResult {
     constructor(options) {
-        this.source = options.source;
         this.artists = options.artists || [];
         this.albums = options.albums || [];
         this.songs = options.songs || [];
+        this.source = options.source;
     }
     getArtist(id) {
         let foundArtist = undefined;
@@ -17,7 +17,7 @@ class MusicResult {
     }
     // Get all songs with a matching [artistId]
     getArtistAlbums(id) {
-        const albums = Array();
+        const albums = [];
         this.albums.forEach((album) => {
             if (album.artistId == id)
                 albums.push(album);
@@ -26,7 +26,7 @@ class MusicResult {
     }
     // Get all songs with a matching [artistId]
     getArtistSongs(id) {
-        const foundSongs = Array();
+        const foundSongs = [];
         this.songs.forEach((song) => {
             if (song.artistId == id)
                 foundSongs.push(song);
@@ -43,7 +43,7 @@ class MusicResult {
     }
     // Get all songs with a matching [albumId]
     getAlbumSongs(id) {
-        const foundSongs = Array();
+        const foundSongs = [];
         this.songs.forEach((song) => {
             if (song.albumId == id)
                 foundSongs.push(song);
