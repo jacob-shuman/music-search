@@ -1,13 +1,13 @@
-import {Source} from "./sources/source";
+import {MusicSource} from "./sources/source";
 
-export interface Artist {
+export interface MusicArtist {
   id: number;
   name: string;
 
   artUrl?: string;
 }
 
-export interface Album {
+export interface MusicAlbum {
   id: number;
   name: string;
 
@@ -16,7 +16,7 @@ export interface Album {
   artistId?: number;
 }
 
-export interface Song {
+export interface MusicSong {
   id: number;
   name: string;
 
@@ -34,39 +34,39 @@ export interface Song {
 
 export interface MusicQuery {
   query: string;
-  sources?: Source[];
+  sources?: MusicSource[];
 
   artistSourceLimit?: number;
   albumSourceLimit?: number;
   songSourceLimit?: number;
 }
 
-export interface ArtistMusicQuery extends MusicQuery {
+export interface MusicArtistQuery extends MusicQuery {
   artistSearchLimit?: number;
   albumSearchLimit?: number;
   songSearchLimit?: number;
 }
 
-export interface AlbumMusicQuery extends MusicQuery {
+export interface MusicAlbumQuery extends MusicQuery {
   albumSearchLimit?: number;
   songSearchLimit?: number;
 }
 
-export interface SongMusicQuery extends MusicQuery {
+export interface MusicSongQuery extends MusicQuery {
   songSearchLimit?: number;
 }
 
 export class MusicResult {
-  readonly source?: Source;
-  readonly artists: Array<Artist>;
-  readonly albums: Array<Album>;
-  readonly songs: Array<Song>;
+  readonly source?: MusicSource;
+  readonly artists: MusicArtist[];
+  readonly albums: MusicAlbum[];
+  readonly songs: MusicSong[];
 
   constructor(options: {
-    source?: Source;
-    artists?: Array<Artist>;
-    albums?: Array<Album>;
-    songs?: Array<Song>;
+    source?: MusicSource;
+    artists?: MusicArtist[];
+    albums?: MusicAlbum[];
+    songs?: MusicSong[];
   }) {
     this.source = options.source;
     this.artists = options.artists || [];
@@ -74,8 +74,8 @@ export class MusicResult {
     this.songs = options.songs || [];
   }
 
-  getArtist(id: number): Artist | undefined {
-    let foundArtist: Artist | undefined = undefined;
+  getArtist(id: number): MusicArtist | undefined {
+    let foundArtist: MusicArtist | undefined = undefined;
 
     this.artists.forEach((artist) => {
       if (artist.id == id) foundArtist = artist;
@@ -85,8 +85,8 @@ export class MusicResult {
   }
 
   // Get all songs with a matching [artistId]
-  getArtistAlbums(id: number): Array<Album> {
-    const albums = Array<Album>();
+  getArtistAlbums(id: number): MusicAlbum[] {
+    const albums: MusicAlbum[] = [];
 
     this.albums.forEach((album) => {
       if (album.artistId == id) albums.push(album);
@@ -96,8 +96,8 @@ export class MusicResult {
   }
 
   // Get all songs with a matching [artistId]
-  getArtistSongs(id: number): Array<Song> {
-    const foundSongs = Array<Song>();
+  getArtistSongs(id: number): MusicSong[] {
+    const foundSongs: MusicSong[] = [];
 
     this.songs.forEach((song) => {
       if (song.artistId == id) foundSongs.push(song);
@@ -106,8 +106,8 @@ export class MusicResult {
     return foundSongs;
   }
 
-  getAlbum(id: number): Album | undefined {
-    let foundAlbum: Album | undefined = undefined;
+  getAlbum(id: number): MusicAlbum | undefined {
+    let foundAlbum: MusicAlbum | undefined = undefined;
 
     this.albums.forEach((album) => {
       if (album.id == id) foundAlbum = album;
@@ -117,8 +117,8 @@ export class MusicResult {
   }
 
   // Get all songs with a matching [albumId]
-  getAlbumSongs(id: number): Array<Song> {
-    const foundSongs = Array<Song>();
+  getAlbumSongs(id: number): MusicSong[] {
+    const foundSongs: MusicSong[] = [];
 
     this.songs.forEach((song) => {
       if (song.albumId == id) foundSongs.push(song);
@@ -127,8 +127,8 @@ export class MusicResult {
     return foundSongs;
   }
 
-  getSong(id: number): Song | undefined {
-    let foundSong: Song | undefined = undefined;
+  getSong(id: number): MusicSong | undefined {
+    let foundSong: MusicSong | undefined = undefined;
 
     this.songs.forEach((song) => {
       if (song.id == id) foundSong = song;

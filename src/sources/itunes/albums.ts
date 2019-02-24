@@ -1,11 +1,11 @@
 import Itunes from "node-itunes-search";
 
-import {Artist, Album, AlbumMusicQuery, MusicResult} from "../../music";
+import {MusicArtist, MusicAlbum, MusicAlbumQuery, MusicResult} from "../../music";
 import {ItunesSearchSource} from "./itunesSource";
 
 import {getArtistById} from "./artists";
 
-export async function getAlbum(options: AlbumMusicQuery): Promise<MusicResult> {
+export async function getAlbum(options: MusicAlbumQuery): Promise<MusicResult> {
   const albumResult: MusicResult = new MusicResult({
     source: new ItunesSearchSource(),
     artists: [],
@@ -27,8 +27,8 @@ export async function getAlbum(options: AlbumMusicQuery): Promise<MusicResult> {
     // TODO work with song.artistId directly
     // Find song artist
     // Assign possibly already existing artist
-    let artistResult: Artist | undefined = albumResult.artists.find(
-      (artist: Artist) => artist.id == album.artistId
+    let artistResult: MusicArtist | undefined = albumResult.artists.find(
+      (artist: MusicArtist) => artist.id == album.artistId
     );
 
     // If it's a new artist then asynchronously retrieve it
@@ -37,7 +37,7 @@ export async function getAlbum(options: AlbumMusicQuery): Promise<MusicResult> {
     // Check if artist with id already exists
     if (
       artistResult &&
-      !albumResult.artists.some((artist: Artist) => artistResult!.id == artist.id)
+      !albumResult.artists.some((artist: MusicArtist) => artistResult!.id == artist.id)
     )
       albumResult.artists.push(artistResult);
 
@@ -75,7 +75,7 @@ export async function getAlbum(options: AlbumMusicQuery): Promise<MusicResult> {
   return albumResult;
 }
 
-export async function getAlbumById(id: number): Promise<Album | undefined> {
+export async function getAlbumById(id: number): Promise<MusicAlbum | undefined> {
   const albumResults: Itunes.Result = await Itunes.lookup({
     keyType: Itunes.LookupType.ID,
     keys: [id.toString()],

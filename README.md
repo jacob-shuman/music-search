@@ -2,13 +2,32 @@
 
 > A music metadata search utility package for Node JS.
 
+## What?
+
+`music-search` is a utility for searching a variety of music metadata sources. This is helpful when in need of music artist/album/song data such as titles, album art, genre, etc.
+
+- [**Installation**](#installation)
+- [**Importing**](#importing)
+- [**AvailableSources**](#sources)
+- [**API**](#api)
+  - [Interfaces](./docs/interfaces.md)
+  - [Namespaces](./docs/namespaces.md)
+
+<a name="installation">
+
 ## Installation
+
+</a>
 
 ```bash
 $ npm install music-search
 ```
 
+<a name="importing">
+
 ## Importing
+
+</a>
 
 #### Commonjs
 
@@ -22,16 +41,33 @@ const musicSearch = require("music-search");
 import {MusicSearch} from "music-search";
 ```
 
+#### Default Namespace
+
+```ts
+import MusicSearch from "music-search";
+```
+
+<a name="sources">
+
 ## Available Sources
 
-| Name              | Implemented |
-| :---------------- | ----------: |
-| iTunes Search API | In Progress |
-| Spotify API       |          No |
+</a>
+
+| Name              | Package(s) Used                                                            | Implemented | Link                                                                                            |
+| ----------------- | -------------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------- |
+| iTunes Search API | [**node-itunes-search**](https://www.npmjs.com/package/node-itunes-search) | In Progress | https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api/ |
+| Spotify API       |                                                                            | No          | https://developer.spotify.com/documentation/web-api/                                            |
+
+<a name="api">
 
 ## API
 
-#### Source
+</a>
+
+- [**Interfaces**](./docs/interfaces.md)
+- [**Namespaces**](./docs/namespaces.md)
+
+  <!-- #### Source
 
 | Property | Type     | Description         | Required? |
 | -------- | -------- | ------------------- | --------- |
@@ -59,4 +95,4 @@ import {MusicSearch} from "music-search";
 | ----------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
 | `getArtist` | `options`: `MusicSearchOptions` | Searches `Sources` from `MusicSearchOptions` and returns a `MusicResult` containing `Artist` and corresponding `Album` and `Song` objects | `Promise<SourceResult<MusicResult>>` |
 | `getAlbum`  | `options`: `MusicSearchOptions` | Searches `Sources` from `MusicSearchOptions` and returns a `MusicResult` containing `Album` and corresponding `Artist` and `Song` objects | `Promise<SourceResult<MusicResult>>` |
-| `getSong`   | `options`: `MusicSearchOptions` | Searches `Sources` from `MusicSearchOptions` and returns a `MusicResult` containing `Song` and corresponding `Artist` and `Album` objects | `Promise<SourceResult<MusicResult>>` |
+| `getSong`   | `options`: `MusicSearchOptions` | Searches `Sources` from `MusicSearchOptions` and returns a `MusicResult` containing `Song` and corresponding `Artist` and `Album` objects | `Promise<SourceResult<MusicResult>>` | --> |

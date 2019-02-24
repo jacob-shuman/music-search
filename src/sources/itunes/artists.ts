@@ -1,9 +1,9 @@
 import Itunes from "node-itunes-search";
 
-import {Artist, ArtistMusicQuery, MusicResult} from "../../music";
+import {MusicArtist, MusicArtistQuery, MusicResult} from "../../music";
 import {ItunesSearchSource} from "./itunesSource";
 
-export async function getArtist(options: ArtistMusicQuery): Promise<MusicResult> {
+export async function getArtist(options: MusicArtistQuery): Promise<MusicResult> {
   let artistResult: MusicResult = new MusicResult({
     source: new ItunesSearchSource(),
     artists: [],
@@ -70,7 +70,7 @@ export async function getArtist(options: ArtistMusicQuery): Promise<MusicResult>
   return artistResult;
 }
 
-export async function getArtistById(id: number): Promise<Artist | undefined> {
+export async function getArtistById(id: number): Promise<MusicArtist | undefined> {
   const artists: Itunes.Result = await Itunes.lookup({
     keyType: Itunes.LookupType.ID,
     keys: [id.toString()],
