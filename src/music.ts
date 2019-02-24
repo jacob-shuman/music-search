@@ -57,21 +57,21 @@ export interface MusicSongQuery extends MusicQuery {
 }
 
 export class MusicResult {
-  readonly source?: MusicSource;
   readonly artists: MusicArtist[];
   readonly albums: MusicAlbum[];
   readonly songs: MusicSong[];
+  readonly source?: MusicSource;
 
   constructor(options: {
-    source?: MusicSource;
     artists?: MusicArtist[];
     albums?: MusicAlbum[];
     songs?: MusicSong[];
+    source?: MusicSource;
   }) {
-    this.source = options.source;
     this.artists = options.artists || [];
     this.albums = options.albums || [];
     this.songs = options.songs || [];
+    this.source = options.source;
   }
 
   getArtist(id: number): MusicArtist | undefined {

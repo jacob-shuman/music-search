@@ -2,6 +2,16 @@
 
 # Interfaces
 
+- [Music](#music)
+- [Source](#source)
+- [Query](#query)
+
+<a name="music">
+
+## **Music**
+
+</a>
+
 ### `MusicArtist`
 
 ```ts
@@ -46,7 +56,7 @@ interface MusicAlbum {
 
 **artistId: `number | undefined`**
 
-### `MusicAlbum`
+### `MusicSong`
 
 ```ts
 interface MusicSong {
@@ -79,3 +89,107 @@ interface MusicSong {
 **artistId: `number | undefined`**
 
 **albumId: `number | undefined`**
+
+<a name="source">
+
+## **Source**
+
+</a>
+
+### `MusicSource`
+
+```ts
+interface MusicSource {
+  name: string;
+
+  getArtist: (options: MusicArtistQuery) => Promise<MusicResult>;
+  getAlbum: (options: MusicAlbumQuery) => Promise<MusicResult>;
+  getSong: (options: MusicSongQuery) => Promise<MusicResult>;
+}
+```
+
+#### Members
+
+**name: `string`**
+
+**getArtist: (options: `MusicArtistQuery`) => `Promise`<`MusicResult`>**
+
+**getAlbum: (options: `MusicAlbumQuery`) => `Promise`<`MusicResult`>**
+
+**getSong: (options: `MusicSongQuery`) => `Promise`<`MusicResult`>**
+
+<a name="query">
+
+## **Query**
+
+</a>
+
+### `MusicQuery`
+
+```ts
+interface MusicQuery {
+  query: string;
+  sources?: MusicSource[];
+
+  artistSourceLimit?: number;
+  albumSourceLimit?: number;
+  songSourceLimit?: number;
+}
+```
+
+#### Members
+
+**query: `string`**
+
+**sources: `MusicSource[] | undefined`**
+
+**artistSourceLimit: `number | undefined`**
+
+**albumSourceLimit: `number | undefined`**
+
+**songSourceLimit: `number | undefined`**
+
+### `MusicArtistQuery` **extends** `MusicQuery`
+
+```ts
+interface MusicArtistQuery extends MusicQuery {
+  artistSearchLimit?: number;
+  albumSearchLimit?: number;
+  songSearchLimit?: number;
+}
+```
+
+#### Members
+
+**artistSearchLimit: `number | undefined`**
+
+**albumSearchLimit: `number | undefined`**
+
+**songSearchLimit: `number | undefined`**
+
+### `MusicAlbumQuery` **extends** `MusicQuery`
+
+```ts
+interface MusicAlbumQuery extends MusicQuery {
+  albumSearchLimit?: number;
+  songSearchLimit?: number;
+}
+```
+
+#### Members
+
+**albumSearchLimit: `number | undefined`**
+
+**songSearchLimit: `number | undefined`**
+
+### `MusicSongQuery` **extends** `MusicQuery`
+
+```ts
+interface MusicSongQuery extends MusicQuery {
+  songSearchLimit?: number;
+}
+```
+
+#### Members
+
+**songSearchLimit: `number | undefined`**
