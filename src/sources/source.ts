@@ -5,7 +5,6 @@ import {MusicResult} from "../result";
 import {ItunesSearchSource} from "./itunes/itunesSource";
 
 export namespace MusicSources {
-  // export const ITUNES_SEARCH: ItunesSearchSource = new ItunesSearchSource();
   export type ITUNES_SEARCH = ItunesSearchSource;
 }
 
