@@ -23,10 +23,10 @@ describe("Source", () => {
 
 // Riddle me this...
 
-// There was a sheep herder and he crosesed a road with 2 sheep and a wolf.
-// He arrives at a bridge.
-// He can move one animal at a time.
+// There was a sheep herder with 2 sheep.
+// He arrives at a bridge with a wolf.
 // The wolf will eat the sheep if left alone with either of them.
+// He can move one animal at a time.
 
-// How does get the animals accross the bridge without the wolf eating the sheep?
+// How does he get all of the animals accross the bridge without the wolf eating the sheep?
 // Tell me how?

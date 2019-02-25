@@ -16,10 +16,6 @@ describe("Source", () => {
 
       const sourceResults: MusicResult[] = await MusicSearch.getArtist(options);
 
-      console.log(sourceResults[0].artists);
-      console.log(sourceResults[0].albums);
-      console.log(sourceResults[0].songs);
-
       expect(sourceResults.length).toBeGreaterThan(0);
     });
   });
