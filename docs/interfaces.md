@@ -129,7 +129,7 @@ interface MusicSource {
 ```ts
 interface MusicQuery {
   query: string;
-  sources?: MusicSource[];
+  sources: MusicSource[];
 }
 ```
 
@@ -137,7 +137,7 @@ interface MusicQuery {
 
 **`query: string`**
 
-**`sources: MusicSource[] | undefined`**
+**`sources: MusicSource[]`**
 
 ### `MusicArtistQuery` **extends** `MusicQuery`
 

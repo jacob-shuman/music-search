@@ -5,7 +5,7 @@ export interface MusicQuery {
   query: string;
 
   // A list of sources to search using the [query]
-  sources?: MusicSource[];
+  sources: MusicSource[];
 }
 
 export interface MusicArtistQuery extends MusicQuery {
