@@ -1,11 +1,62 @@
 import Itunes from "node-itunes-search";
 
-import {MusicArtist, MusicAlbum} from "../../music";
+import {MusicArtist, MusicAlbum, MusicSong} from "../../music";
 import {MusicAlbumQuery} from "../../query";
 import {MusicResult} from "../../result";
 import {ItunesSearchSource} from "./itunesSource";
 
 import {getArtistById} from "./artists";
+
+export async function getAlbumArtist(
+  artistId: number,
+  artists: MusicArtist[]
+): Promise<MusicArtist | undefined> {
+  let artistResult: MusicArtist | undefined = undefined;
+
+  // Assign possibly already existing artist
+  artistResult = artists.find((currentArtist: MusicArtist) => currentArtist.id == artistId);
+
+  // If it's a new artist then asynchronously retrieve it
+  if (!artistResult && artistId) artistResult = await getArtistById(artistId);
+
+  return artistResult;
+}
+
+export async function getAlbumSongs(
+  albumId: number,
+  songLimit?: number,
+  artistId?: number
+): Promise<MusicSong[]> {
+  const albumSongs: MusicSong[] = [];
+
+  const songResults: Itunes.Result = await Itunes.lookup({
+    keys: [albumId.toString()],
+    keyType: Itunes.LookupType.ID,
+    entity: Itunes.Entity.Music.Song,
+    limit: songLimit
+  });
+
+  // First index is always the collection, the remaining are songs of that collection
+  for (let index = 1; index < songResults.resultCount; ++index) {
+    const songResult: Itunes.Properties = songResults.results[index];
+
+    const currentSong: MusicSong = {
+      id: songResult.trackId || -1,
+      name: songResult.trackName || "",
+      duration: songResult.trackTimeMillis,
+      genre: songResult.primaryGenreName,
+      track: songResult.trackNumber,
+      albumId: albumId
+    };
+
+    // Apply the [artistId] if defined
+    if (artistId) currentSong.artistId;
+
+    albumSongs.push(currentSong);
+  }
+
+  return albumSongs;
+}
 
 export async function getAlbum(options: MusicAlbumQuery): Promise<MusicResult> {
   const albumResult: MusicResult = new MusicResult({
@@ -15,63 +66,54 @@ export async function getAlbum(options: MusicAlbumQuery): Promise<MusicResult> {
     songs: []
   });
 
-  // Query the iTunes Search API & filter out results without an id or name
+  // Array of [ItunesProperties] matches
+  // This filters out any results without the required properties
   const albumSearch: Itunes.Properties[] = (await Itunes.search({
     term: options.query,
     entity: Itunes.Entity.Music.Album,
-    limit: options.albumSearchLimit
+    limit: options.albumLimit
   })).results.filter((prop: Itunes.Properties) => {
     return prop.collectionId && prop.collectionName;
   });
 
-  // Lookup all songs with found album (collection) id
   for (let album of albumSearch) {
-    // TODO work with song.artistId directly
-    // Find song artist
-    // Assign possibly already existing artist
-    let artistResult: MusicArtist | undefined = albumResult.artists.find(
-      (artist: MusicArtist) => artist.id == album.artistId
-    );
-
-    // If it's a new artist then asynchronously retrieve it
-    if (!artistResult && album.artistId) artistResult = await getArtistById(album.artistId);
-
-    // Check if artist with id already exists
-    if (
-      artistResult &&
-      !albumResult.artists.some((artist: MusicArtist) => artistResult!.id == artist.id)
-    )
-      albumResult.artists.push(artistResult);
-
-    const songResults: Itunes.Result = await Itunes.lookup({
-      keys: [album.collectionId!.toString()],
-      keyType: Itunes.LookupType.ID,
-      entity: Itunes.Entity.Music.Song,
-      limit: options.songSearchLimit
-    });
-
-    // First index is always the collection, the remaining are songs of that collection
-    for (let index = 1; index < songResults.resultCount; ++index) {
-      const song: Itunes.Properties = songResults.results[index];
-
-      //TODO filter out invalid songs prior
-      albumResult.songs.push({
-        id: song.trackId || -1,
-        name: song.trackName || "",
-        duration: song.trackTimeMillis,
-        genre: song.primaryGenreName,
-        track: song.trackNumber,
-        artistId: album.artistId,
-        albumId: album.collectionId
-      });
-    }
-
-    albumResult.albums.push({
+    // Parsing basic album properties
+    const currentAlbum: MusicAlbum = {
       id: album.collectionId!,
       name: album.collectionName,
-      trackCount: album.trackCount,
-      artistId: artistResult ? artistResult.id : undefined
-    });
+      trackCount: album.trackCount
+    };
+
+    let albumArtist: MusicArtist | undefined = undefined;
+    let albumSongs: MusicSong[] | undefined = undefined;
+
+    // Find album artist
+    if (options.includeArtist && album.artistId) {
+      albumArtist = await getAlbumArtist(album.artistId, albumResult.artists);
+
+      if (albumArtist) {
+        // Apply found album artist to [currentAlbum]
+        currentAlbum.artistId = albumArtist.id;
+
+        // If the found artist doesn't exist in [albumResult]'s [artists] array then push it
+        if (albumResult.getArtist(albumArtist.id) == undefined)
+          albumResult.artists.push(albumArtist);
+      }
+    }
+
+    // Find album songs
+    if (options.includeSongs) {
+      albumSongs = await getAlbumSongs(
+        currentAlbum.id,
+        options.songLimit,
+        albumArtist ? albumArtist.id : undefined
+      );
+
+      // Append all songs to [albumResult]'s [songs] array
+      if (albumSongs) for (let song of albumSongs) albumResult.songs.push(song);
+    }
+
+    albumResult.albums.push(currentAlbum);
   }
 
   return albumResult;

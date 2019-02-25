@@ -25,11 +25,11 @@ interface MusicArtist {
 
 #### Members
 
-**id: `number`**
+**`id: number`**
 
-**name: `string`**
+**`name: string`**
 
-**artUrl: `string | undefined`**
+**`artUrl: string | undefined`**
 
 ### `MusicAlbum`
 
@@ -46,15 +46,15 @@ interface MusicAlbum {
 
 #### Members
 
-**id: `number`**
+**`id: number`**
 
-**name: `string`**
+**`name: string`**
 
-**trackCount: `number | undefined`**
+**`trackCount: number | undefined`**
 
-**artUrl: `string | undefined`**
+**`artUrl: string | undefined`**
 
-**artistId: `number | undefined`**
+**`artistId: number | undefined`**
 
 ### `MusicSong`
 
@@ -76,19 +76,19 @@ interface MusicSong {
 
 #### Members
 
-**id: `number`**
+**`id: number`**
 
-**name: `string`**
+**`name: string`**
 
-**track: `number | undefined`**
+**`track: number | undefined`**
 
-**duration: `number | undefined`**
+**`duration: number | undefined`**
 
-**genre: `string | undefined`**
+**`genre: string | undefined`**
 
-**artistId: `number | undefined`**
+**`artistId: number | undefined`**
 
-**albumId: `number | undefined`**
+**`albumId: number | undefined`**
 
 <a name="source">
 
@@ -110,13 +110,13 @@ interface MusicSource {
 
 #### Members
 
-**name: `string`**
+**`name: string`**
 
-**getArtist: (options: `MusicArtistQuery`) => `Promise`<`MusicResult`>**
+**`getArtist: (options: MusicArtistQuery) => Promise<MusicResult>`**
 
-**getAlbum: (options: `MusicAlbumQuery`) => `Promise`<`MusicResult`>**
+**`getAlbum: (options: MusicAlbumQuery) => Promise<MusicResult>`**
 
-**getSong: (options: `MusicSongQuery`) => `Promise`<`MusicResult`>**
+**`getSong: (options: MusicSongQuery) => Promise<MusicResult>`**
 
 <a name="query">
 
@@ -130,66 +130,77 @@ interface MusicSource {
 interface MusicQuery {
   query: string;
   sources?: MusicSource[];
-
-  artistSourceLimit?: number;
-  albumSourceLimit?: number;
-  songSourceLimit?: number;
 }
 ```
 
 #### Members
 
-**query: `string`**
+**`query: string`**
 
-**sources: `MusicSource[] | undefined`**
-
-**artistSourceLimit: `number | undefined`**
-
-**albumSourceLimit: `number | undefined`**
-
-**songSourceLimit: `number | undefined`**
+**`sources: MusicSource[] | undefined`**
 
 ### `MusicArtistQuery` **extends** `MusicQuery`
 
 ```ts
 interface MusicArtistQuery extends MusicQuery {
-  artistSearchLimit?: number;
-  albumSearchLimit?: number;
-  songSearchLimit?: number;
+  includeAlbums?: boolean;
+  includeSongs?: boolean;
+
+  artistLimit?: number;
+  albumLimit?: number;
+  songLimit?: number;
 }
 ```
 
 #### Members
 
-**artistSearchLimit: `number | undefined`**
+**`includeAlbums: boolean | undefined`**
 
-**albumSearchLimit: `number | undefined`**
+**`includeSongs: boolean | undefined`**
 
-**songSearchLimit: `number | undefined`**
+**`artistLimit: number | undefined`**
+
+**`albumLimit: number | undefined`**
+
+**`songLimit: number | undefined`**
 
 ### `MusicAlbumQuery` **extends** `MusicQuery`
 
 ```ts
 interface MusicAlbumQuery extends MusicQuery {
-  albumSearchLimit?: number;
-  songSearchLimit?: number;
+  includeArtist?: boolean;
+  includeSongs?: boolean;
+
+  albumLimit?: number;
+  songLimit?: number;
 }
 ```
 
 #### Members
 
-**albumSearchLimit: `number | undefined`**
+**`includeArtist: boolean | undefined`**
 
-**songSearchLimit: `number | undefined`**
+**`includeSongs: boolean | undefined`**
 
-### `MusicSongQuery` **extends** `MusicQuery`
+**`albumLimit: number | undefined`**
+
+**`songLimit: number | undefined`**
+
+### `MusicSongQuery extends MusicQuery`
 
 ```ts
 interface MusicSongQuery extends MusicQuery {
-  songSearchLimit?: number;
+  includeArtist?: boolean;
+  includeAlbum?: boolean;
+
+  songLimit?: number;
 }
 ```
 
 #### Members
 
-**songSearchLimit: `number | undefined`**
+**`includeArtist: boolean | undefined`**
+
+**`includeAlbum: boolean | undefined`**
+
+**`songLimit: number | undefined`**

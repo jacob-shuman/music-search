@@ -10,11 +10,11 @@ async function searchArtist(options: MusicArtistQuery): Promise<MusicResult[]>;
 
 #### Parameters
 
-**options: `MusicArtistQuery`**
+**`options: MusicArtistQuery`**
 
 #### Return Value
 
-**`Promise`<`MusicResult[]`>**
+**`Promise<MusicResult[]>`**
 
 ### `searchAlbum`
 
@@ -24,11 +24,11 @@ async function searchAlbum(options: MusicAlbumQuery): Promise<MusicResult[]>;
 
 #### Parameters
 
-**options: `MusicAlbumQuery`**
+**`options: MusicAlbumQuery`**
 
 #### Return Value
 
-**`Promise`<`MusicResult[]`>**
+**`Promise<MusicResult[]>`**
 
 ### `searchSong`
 
@@ -38,8 +38,8 @@ async function searchSong(options: MusicSongQuery): Promise<MusicResult[]>;
 
 #### Parameters
 
-**options: `MusicSongQuery`**
+**`options: MusicSongQuery`**
 
 #### Return Value
 
-**`Promise`<`MusicResult[]`>**
+**`Promise<MusicResult[]>`**

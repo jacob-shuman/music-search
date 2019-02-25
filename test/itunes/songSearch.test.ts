@@ -8,7 +8,9 @@ describe("Source", () => {
     test("Song Search", async () => {
       const options: MusicSongQuery = {
         query: "Queen Bohemian Rhapsody",
-        songSearchLimit: 1,
+        includeArtist: true,
+        includeAlbum: true,
+        songLimit: 2,
         sources: [new ItunesSearchSource()]
       };
 
@@ -27,3 +29,4 @@ describe("Source", () => {
 // The wolf will eat the sheep if left alone with either of them.
 
 // How does get the animals accross the bridge without the wolf eating the sheep?
+// Tell me how?

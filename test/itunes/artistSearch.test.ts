@@ -8,12 +8,17 @@ describe("Source", () => {
     test("Artist Search", async () => {
       const options: MusicArtistQuery = {
         query: "Queen",
-        artistSearchLimit: 1,
-        albumSearchLimit: 1,
+        includeSongs: true,
+        artistLimit: 2,
+        songLimit: 10,
         sources: [new ItunesSearchSource()]
       };
 
       const sourceResults: MusicResult[] = await MusicSearch.getArtist(options);
+
+      console.log(sourceResults[0].artists);
+      console.log(sourceResults[0].albums);
+      console.log(sourceResults[0].songs);
 
       expect(sourceResults.length).toBeGreaterThan(0);
     });

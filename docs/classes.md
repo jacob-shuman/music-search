@@ -31,22 +31,22 @@ export class MusicResult {
 
 #### Members
 
-**readonly artists: `MusicArtist[]`**
+**`readonly artists: MusicArtist[]`**
 
-**readonly albums: `MusicAlbum[]`**
+**`readonly albums: MusicAlbum[]`**
 
-**readonly songs: `MusicSong[]`**
+**`readonly songs: MusicSong[]`**
 
-**readonly source: `MusicSource | undefined`**
+**`readonly source: MusicSource | undefined`**
 
-**getArtist: (id: `number`) => `MusicArtist | undefined`**
+**`getArtist: (id: number) => MusicArtist | undefined`**
 
-**getArtistAlbums: (id: `number`) => `MusicAlbum[]`**
+**`getArtistAlbums: (id: number) => MusicAlbum[]`**
 
-**getArtistSongs: (id: `number`) => `MusicSong[]`**
+**`getArtistSongs: (id: number) => MusicSong[]`**
 
-**getAlbum: (id: `number`) => `MusicAlbum | undefined`**
+**`getAlbum: (id: number) => MusicAlbum | undefined`**
 
-**getAlbumSongs: (id: `number`) => `MusicSong[]`**
+**`getAlbumSongs: (id: number) => MusicSong[]`**
 
-**getSong: (id: `number`) => `MusicSong | undefined`**
+**`getSong: (id: number) => MusicSong | undefined`**

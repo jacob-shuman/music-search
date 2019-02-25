@@ -1,25 +1,51 @@
 import {MusicSource} from "./sources/source";
 
 export interface MusicQuery {
+  // A string to search against
   query: string;
-  sources?: MusicSource[];
 
-  artistSourceLimit?: number;
-  albumSourceLimit?: number;
-  songSourceLimit?: number;
+  // A list of sources to search using the [query]
+  sources?: MusicSource[];
 }
 
 export interface MusicArtistQuery extends MusicQuery {
-  artistSearchLimit?: number;
-  albumSearchLimit?: number;
-  songSearchLimit?: number;
+  // Find and include artist albums in result?
+  includeAlbums?: boolean;
+
+  // Find and include artist album songs in result?
+  includeSongs?: boolean;
+
+  // Maximum number of artists per source
+  artistLimit?: number;
+
+  // Maximum number of albums per artist
+  albumLimit?: number;
+
+  // Maximum number of songs per album
+  songLimit?: number;
 }
 
 export interface MusicAlbumQuery extends MusicQuery {
-  albumSearchLimit?: number;
-  songSearchLimit?: number;
+  // Find and include artist in result?
+  includeArtist?: boolean;
+
+  // Find and include album songs in result?
+  includeSongs?: boolean;
+
+  // Maximum number of albums per source
+  albumLimit?: number;
+
+  // Maximum number of songs per album
+  songLimit?: number;
 }
 
 export interface MusicSongQuery extends MusicQuery {
-  songSearchLimit?: number;
+  // Find and include artist in result?
+  includeArtist?: boolean;
+
+  // Find and include album in result?
+  includeAlbum?: boolean;
+
+  // Maximum number of songs per source
+  songLimit?: number;
 }

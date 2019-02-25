@@ -8,7 +8,9 @@ describe("Source", () => {
     test("Album Search", async () => {
       const options: MusicAlbumQuery = {
         query: "Villains qotsa",
-        albumSearchLimit: 1,
+        includeArtist: true,
+        includeSongs: true,
+        albumLimit: 1,
         sources: [new ItunesSearchSource()]
       };
 
