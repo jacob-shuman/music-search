@@ -33,6 +33,6 @@
     "typescript": "^3.2.2"
   },
   "dependencies": {
-    "node-itunes-search": "^1.2.1"
+    "node-itunes-search": "~1.2.1"
   }
 }
