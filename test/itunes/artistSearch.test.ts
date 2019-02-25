@@ -11,7 +11,9 @@ describe("Source", () => {
 
       const options: MusicArtistQuery = {
         query: "Queen",
-        sources: [new ItunesSearchSource()]
+        sources: [new ItunesSearchSource()],
+
+        artistLimit: 1
       };
 
       const sourceResults: MusicResult[] = await MusicSearch.getArtist(options);

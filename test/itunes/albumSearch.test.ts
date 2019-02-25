@@ -6,17 +6,85 @@ import {MusicSearch, MusicAlbumQuery, MusicResult, ItunesSearchSource} from "../
 describe("Source", () => {
   describe("Itunes", () => {
     test("Album Search", async () => {
+      expect.assertions(4);
+
       const options: MusicAlbumQuery = {
         query: "Villains qotsa",
-        includeArtist: true,
-        includeSongs: true,
-        albumLimit: 1,
-        sources: [new ItunesSearchSource()]
+        sources: [new ItunesSearchSource()],
+
+        albumLimit: 1
       };
 
       const sourceResults: MusicResult[] = await MusicSearch.getAlbum(options);
 
       expect(sourceResults.length).toBeGreaterThan(0);
+
+      expect(sourceResults[0].artists.length).toBeLessThan(1);
+      expect(sourceResults[0].albums.length).toBeGreaterThan(0);
+      expect(sourceResults[0].songs.length).toBeLessThan(1);
+    });
+
+    test("Album Search with Artist", async () => {
+      expect.assertions(4);
+
+      const options: MusicAlbumQuery = {
+        query: "Villains qotsa",
+        sources: [new ItunesSearchSource()],
+
+        includeArtist: true,
+        albumLimit: 1
+      };
+
+      const sourceResults: MusicResult[] = await MusicSearch.getAlbum(options);
+
+      expect(sourceResults.length).toBeGreaterThan(0);
+
+      expect(sourceResults[0].artists.length).toEqual(1);
+      expect(sourceResults[0].albums.length).toBeGreaterThan(0);
+      expect(sourceResults[0].songs.length).toBeLessThan(1);
+    });
+
+    test("Album Search with Songs", async () => {
+      expect.assertions(4);
+
+      const options: MusicAlbumQuery = {
+        query: "Villains qotsa",
+        sources: [new ItunesSearchSource()],
+
+        includeSongs: true,
+        albumLimit: 1,
+        songLimit: 1
+      };
+
+      const sourceResults: MusicResult[] = await MusicSearch.getAlbum(options);
+
+      expect(sourceResults.length).toBeGreaterThan(0);
+
+      expect(sourceResults[0].artists.length).toBeLessThan(1);
+      expect(sourceResults[0].albums.length).toBeGreaterThan(0);
+      expect(sourceResults[0].songs.length).toBeGreaterThan(0);
+    });
+
+    test("Album Search with Artist and Songs", async () => {
+      expect.assertions(4);
+
+      const options: MusicAlbumQuery = {
+        query: "Villains qotsa",
+        sources: [new ItunesSearchSource()],
+
+        includeArtist: true,
+        includeSongs: true,
+        albumLimit: 1,
+        songLimit: 1
+      };
+
+      const sourceResults: MusicResult[] = await MusicSearch.getAlbum(options);
+
+      expect(sourceResults.length).toBeGreaterThan(0);
+
+      expect(sourceResults[0].artists.length).toEqual(1);
+      expect(sourceResults[0].albums.length).toBeGreaterThan(0);
+      expect(sourceResults[0].songs.length).toBeGreaterThan(0);
     });
   });
 });

@@ -6,17 +6,83 @@ import {MusicSearch, MusicSongQuery, MusicResult, ItunesSearchSource} from "../.
 describe("Source", () => {
   describe("Itunes", () => {
     test("Song Search", async () => {
+      expect.assertions(4);
+
       const options: MusicSongQuery = {
         query: "Queen Bohemian Rhapsody",
-        includeArtist: true,
-        includeAlbum: true,
-        songLimit: 2,
-        sources: [new ItunesSearchSource()]
+        sources: [new ItunesSearchSource()],
+
+        songLimit: 1
       };
 
       const sourceResults: MusicResult[] = await MusicSearch.getSong(options);
 
       expect(sourceResults.length).toBeGreaterThan(0);
+
+      expect(sourceResults[0].artists.length).toBeLessThan(1);
+      expect(sourceResults[0].albums.length).toBeLessThan(1);
+      expect(sourceResults[0].songs.length).toBeGreaterThan(0);
+    });
+
+    test("Song Search with Artist", async () => {
+      expect.assertions(4);
+
+      const options: MusicSongQuery = {
+        query: "Queen Bohemian Rhapsody",
+        sources: [new ItunesSearchSource()],
+
+        includeArtist: true,
+        songLimit: 1
+      };
+
+      const sourceResults: MusicResult[] = await MusicSearch.getSong(options);
+
+      expect(sourceResults.length).toBeGreaterThan(0);
+
+      expect(sourceResults[0].artists.length).toEqual(1);
+      expect(sourceResults[0].albums.length).toBeLessThan(1);
+      expect(sourceResults[0].songs.length).toBeGreaterThan(0);
+    });
+
+    test("Song Search with Album", async () => {
+      expect.assertions(4);
+
+      const options: MusicSongQuery = {
+        query: "Queen Bohemian Rhapsody",
+        sources: [new ItunesSearchSource()],
+
+        includeAlbum: true,
+        songLimit: 1
+      };
+
+      const sourceResults: MusicResult[] = await MusicSearch.getSong(options);
+
+      expect(sourceResults.length).toBeGreaterThan(0);
+
+      expect(sourceResults[0].artists.length).toBeLessThan(1);
+      expect(sourceResults[0].albums.length).toEqual(1);
+      expect(sourceResults[0].songs.length).toBeGreaterThan(0);
+    });
+
+    test("Song Search with Album", async () => {
+      expect.assertions(4);
+
+      const options: MusicSongQuery = {
+        query: "Queen Bohemian Rhapsody",
+        sources: [new ItunesSearchSource()],
+
+        includeArtist: true,
+        includeAlbum: true,
+        songLimit: 1
+      };
+
+      const sourceResults: MusicResult[] = await MusicSearch.getSong(options);
+
+      expect(sourceResults.length).toBeGreaterThan(0);
+
+      expect(sourceResults[0].artists.length).toEqual(1);
+      expect(sourceResults[0].albums.length).toEqual(1);
+      expect(sourceResults[0].songs.length).toBeGreaterThan(0);
     });
   });
 });
