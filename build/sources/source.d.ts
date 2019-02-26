@@ -1,8 +1,12 @@
-import { SourceResult, MusicResult } from "../result";
-import { MusicSearchOptions } from "../search";
-export interface Source {
+import { MusicArtistQuery, MusicAlbumQuery, MusicSongQuery } from "../query";
+import { MusicResult } from "../result";
+import { ItunesSearchSource } from "./itunes/itunesSource";
+export interface MusicSource {
     name: string;
-    getArtist: (options: MusicSearchOptions) => Promise<SourceResult<MusicResult>>;
-    getAlbum: (options: MusicSearchOptions) => Promise<SourceResult<MusicResult>>;
-    getSong: (options: MusicSearchOptions) => Promise<SourceResult<MusicResult>>;
+    getArtist: (options: MusicArtistQuery) => Promise<MusicResult>;
+    getAlbum: (options: MusicAlbumQuery) => Promise<MusicResult>;
+    getSong: (options: MusicSongQuery) => Promise<MusicResult>;
+}
+export declare namespace MusicSources {
+    type ITUNES_SEARCH = ItunesSearchSource;
 }

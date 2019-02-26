@@ -1,13 +1,14 @@
 {
   "name": "music-search",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "A music metadata search utility package for Node JS.",
   "main": "build/index.js",
   "types": "build/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "npm run build; jest",
-    "testWatch": "clear; jest --watchAll"
+    "build-watch": "tsc --watch",
+    "test": "npm run build; jest --detectOpenHandles",
+    "test-watch": "npm run build; jest --watchAll"
   },
   "repository": {
     "type": "git",
@@ -25,13 +26,13 @@
   },
   "homepage": "https://github.com/jacob-shuman/music-search#readme",
   "devDependencies": {
-    "@types/jest": "^23.3.9",
-    "@types/node": "^10.12.9",
-    "jest": "^23.6.0",
-    "ts-jest": "^23.10.4",
-    "typescript": "^3.1.6"
+    "@types/jest": "^24.0.0",
+    "@types/node": "^10.12.18",
+    "jest": "^24.0.0",
+    "ts-jest": "^24.0.0",
+    "typescript": "^3.2.2"
   },
   "dependencies": {
-    "node-itunes-search": "^1.1.0"
+    "node-itunes-search": "~1.2.1"
   }
 }

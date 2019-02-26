@@ -1,42 +1,26 @@
-import { Source } from "./sources/source";
-import { Artist, Album, Song } from "./music";
-
-export class SourceResult<T> {
-  // Copy of source used
-  readonly source: Source;
-
-  // Result from source
-  readonly result: T;
-
-  // Success state of the source action
-  readonly success: boolean;
-
-  constructor(options: { result: T; source: Source; success?: boolean }) {
-    this.source = options.source;
-    this.result = options.result;
-    this.success = options.success || false;
-  }
-}
+import {MusicArtist, MusicAlbum, MusicSong} from "./music";
+import {MusicSource} from "./sources/source";
 
 export class MusicResult {
-  readonly artists: Array<Artist>;
-
-  readonly albums: Array<Album>;
-
-  readonly songs: Array<Song>;
+  readonly artists: MusicArtist[];
+  readonly albums: MusicAlbum[];
+  readonly songs: MusicSong[];
+  readonly source?: MusicSource;
 
   constructor(options: {
-    artists?: Array<Artist>;
-    albums?: Array<Album>;
-    songs?: Array<Song>;
+    artists?: MusicArtist[];
+    albums?: MusicAlbum[];
+    songs?: MusicSong[];
+    source?: MusicSource;
   }) {
     this.artists = options.artists || [];
     this.albums = options.albums || [];
     this.songs = options.songs || [];
+    this.source = options.source;
   }
 
-  getArtist(id: number): Artist | undefined {
-    let foundArtist: Artist | undefined = undefined;
+  getArtist(id: number): MusicArtist | undefined {
+    let foundArtist: MusicArtist | undefined = undefined;
 
     this.artists.forEach((artist) => {
       if (artist.id == id) foundArtist = artist;
@@ -46,29 +30,29 @@ export class MusicResult {
   }
 
   // Get all songs with a matching [artistId]
-  getArtistAlbums(artist: Artist): Array<Album> {
-    const albums = Array<Album>();
+  getArtistAlbums(id: number): MusicAlbum[] {
+    const albums: MusicAlbum[] = [];
 
     this.albums.forEach((album) => {
-      if (album.artistId == artist.id) albums.push(album);
+      if (album.artistId == id) albums.push(album);
     });
 
     return albums;
   }
 
   // Get all songs with a matching [artistId]
-  getArtistSongs(artist: Artist): Array<Song> {
-    const foundSongs = Array<Song>();
+  getArtistSongs(id: number): MusicSong[] {
+    const foundSongs: MusicSong[] = [];
 
     this.songs.forEach((song) => {
-      if (song.artistId == artist.id) foundSongs.push(song);
+      if (song.artistId == id) foundSongs.push(song);
     });
 
     return foundSongs;
   }
 
-  getAlbum(id: number): Album | undefined {
-    let foundAlbum: Album | undefined = undefined;
+  getAlbum(id: number): MusicAlbum | undefined {
+    let foundAlbum: MusicAlbum | undefined = undefined;
 
     this.albums.forEach((album) => {
       if (album.id == id) foundAlbum = album;
@@ -77,54 +61,24 @@ export class MusicResult {
     return foundAlbum;
   }
 
-  getAlbumArtist(id: number): Artist | undefined {
-    let foundArtist: Artist | undefined = undefined;
-
-    this.artists.forEach((artist) => {
-      if (artist.id == id) foundArtist = artist;
-    });
-
-    return foundArtist;
-  }
-
   // Get all songs with a matching [albumId]
-  getAlbumSongs(album: Album): Array<Song> {
-    const foundSongs = Array<Song>();
+  getAlbumSongs(id: number): MusicSong[] {
+    const foundSongs: MusicSong[] = [];
 
     this.songs.forEach((song) => {
-      if (song.albumId == album.id) foundSongs.push(song);
+      if (song.albumId == id) foundSongs.push(song);
     });
 
     return foundSongs;
   }
 
-  getSong(id: number): Song | undefined {
-    let foundSong: Song | undefined = undefined;
+  getSong(id: number): MusicSong | undefined {
+    let foundSong: MusicSong | undefined = undefined;
 
     this.songs.forEach((song) => {
       if (song.id == id) foundSong = song;
     });
 
     return foundSong;
-  }
-
-  getSongArtist(id: number): Artist | undefined {
-    let foundArtist: Artist | undefined = undefined;
-
-    this.artists.forEach((artist) => {
-      if (artist.id == id) foundArtist = artist;
-    });
-
-    return foundArtist;
-  }
-
-  getSongAlbum(song: Song): Album | undefined {
-    let foundAlbum: Album | undefined = undefined;
-
-    this.albums.forEach((album) => {
-      if (album.id == song.id) foundAlbum = album;
-    });
-
-    return foundAlbum;
   }
 }

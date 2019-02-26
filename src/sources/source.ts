@@ -1,18 +1,18 @@
-import { Artist, Album, Song } from "../music";
-
-import { SourceResult, MusicResult } from "../result";
+import {MusicArtistQuery, MusicAlbumQuery, MusicSongQuery} from "../query";
+import {MusicResult} from "../result";
 
 // Sources
-import { ItunesSearchSource } from "./itunes-search";
-import { MusicSearchOptions } from "../search";
+import {ItunesSearchSource} from "./itunes/itunesSource";
 
-export interface Source {
-  // Name of source (Ex: "Itunes", "Sportify", "Last.FM")
+export interface MusicSource {
+  // Name of source (Ex: "Itunes", "Spotify", "Last.FM")
   name: string;
 
-  getArtist: (
-    options: MusicSearchOptions
-  ) => Promise<SourceResult<MusicResult>>;
-  getAlbum: (options: MusicSearchOptions) => Promise<SourceResult<MusicResult>>;
-  getSong: (options: MusicSearchOptions) => Promise<SourceResult<MusicResult>>;
+  getArtist: (options: MusicArtistQuery) => Promise<MusicResult>;
+  getAlbum: (options: MusicAlbumQuery) => Promise<MusicResult>;
+  getSong: (options: MusicSongQuery) => Promise<MusicResult>;
+}
+
+export namespace MusicSources {
+  export type ITUNES_SEARCH = ItunesSearchSource;
 }

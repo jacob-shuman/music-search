@@ -8,44 +8,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-class MusicSearchOptions {
-    constructor(options) {
-        // this.sources = options.sources || Sources.values;
-        this.query = options.query;
-        this.sources = options.sources || [];
-        this.artistLimit = options.artistLimit;
-        this.albumLimit = options.albumLimit;
-        this.songLimit = options.songLimit;
-    }
+function searchArtist(options) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let results = [];
+        for (let source of options.sources)
+            results.push(yield source.getArtist(options));
+        return results;
+    });
 }
-exports.MusicSearchOptions = MusicSearchOptions;
-class MusicSearch {
-    static getArtist(options) {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            let searchOptions = options || this.options;
-            let results = [];
-            for (let index = 0; index < searchOptions.sources.length; index++)
-                results.push(yield searchOptions.sources[index].getArtist(searchOptions));
-            resolve(results);
-        }));
-    }
-    static getAlbum(options) {
-        return new Promise((resolve, Album) => __awaiter(this, void 0, void 0, function* () {
-            let searchOptions = options || this.options;
-            let results = [];
-            for (let index = 0; index < searchOptions.sources.length; index++)
-                results.push(yield searchOptions.sources[index].getAlbum(searchOptions));
-            resolve(results);
-        }));
-    }
-    static getSong(options) {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            let searchOptions = options || this.options;
-            let results = [];
-            for (let index = 0; index < searchOptions.sources.length; index++)
-                results.push(yield searchOptions.sources[index].getSong(searchOptions));
-            resolve(results);
-        }));
-    }
+exports.searchArtist = searchArtist;
+function searchAlbum(options) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let results = [];
+        for (let source of options.sources)
+            results.push(yield source.getAlbum(options));
+        return results;
+    });
 }
-exports.MusicSearch = MusicSearch;
+exports.searchAlbum = searchAlbum;
+function searchSong(options) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let results = [];
+        for (let source of options.sources)
+            results.push(yield source.getSong(options));
+        return results;
+    });
+}
+exports.searchSong = searchSong;
