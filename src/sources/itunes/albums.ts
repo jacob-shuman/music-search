@@ -50,7 +50,7 @@ export async function getAlbumSongs(
     };
 
     // Apply the [artistId] if defined
-    if (artistId) currentSong.artistId;
+    if (artistId) currentSong.artistId = artistId;
 
     albumSongs.push(currentSong);
   }
