@@ -139,7 +139,7 @@ interface MusicQuery {
 
 **`sources: MusicSource[]`**
 
-### `MusicArtistQuery` **extends** `MusicQuery`
+### `MusicArtistQuery extends MusicQuery`
 
 ```ts
 interface MusicArtistQuery extends MusicQuery {
@@ -164,7 +164,7 @@ interface MusicArtistQuery extends MusicQuery {
 
 **`songLimit: number | undefined`**
 
-### `MusicAlbumQuery` **extends** `MusicQuery`
+### `MusicAlbumQuery extends MusicQuery`
 
 ```ts
 interface MusicAlbumQuery extends MusicQuery {
