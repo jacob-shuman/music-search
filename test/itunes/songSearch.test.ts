@@ -6,7 +6,7 @@ import {MusicSearch, MusicSongQuery, MusicResult, ItunesSearchSource} from "../.
 describe("Source", () => {
   describe("Itunes", () => {
     test("Song Search", async () => {
-      expect.assertions(4);
+      expect.assertions(6);
 
       const options: MusicSongQuery = {
         query: "Queen Bohemian Rhapsody",
@@ -22,10 +22,13 @@ describe("Source", () => {
       expect(sourceResults[0].artists.length).toBeLessThan(1);
       expect(sourceResults[0].albums.length).toBeLessThan(1);
       expect(sourceResults[0].songs.length).toBeGreaterThan(0);
+
+      expect(sourceResults[0].songs[0].artistId).toBeUndefined();
+      expect(sourceResults[0].songs[0].albumId).toBeUndefined();
     });
 
     test("Song Search with Artist", async () => {
-      expect.assertions(4);
+      expect.assertions(6);
 
       const options: MusicSongQuery = {
         query: "Queen Bohemian Rhapsody",
@@ -42,10 +45,13 @@ describe("Source", () => {
       expect(sourceResults[0].artists.length).toEqual(1);
       expect(sourceResults[0].albums.length).toBeLessThan(1);
       expect(sourceResults[0].songs.length).toBeGreaterThan(0);
+
+      expect(sourceResults[0].songs[0].artistId).toBeDefined();
+      expect(sourceResults[0].songs[0].albumId).toBeUndefined();
     });
 
     test("Song Search with Album", async () => {
-      expect.assertions(4);
+      expect.assertions(6);
 
       const options: MusicSongQuery = {
         query: "Queen Bohemian Rhapsody",
@@ -62,10 +68,13 @@ describe("Source", () => {
       expect(sourceResults[0].artists.length).toBeLessThan(1);
       expect(sourceResults[0].albums.length).toEqual(1);
       expect(sourceResults[0].songs.length).toBeGreaterThan(0);
+
+      expect(sourceResults[0].songs[0].artistId).toBeUndefined();
+      expect(sourceResults[0].songs[0].albumId).toBeDefined();
     });
 
     test("Song Search with Album", async () => {
-      expect.assertions(4);
+      expect.assertions(6);
 
       const options: MusicSongQuery = {
         query: "Queen Bohemian Rhapsody",
@@ -83,6 +92,9 @@ describe("Source", () => {
       expect(sourceResults[0].artists.length).toEqual(1);
       expect(sourceResults[0].albums.length).toEqual(1);
       expect(sourceResults[0].songs.length).toBeGreaterThan(0);
+
+      expect(sourceResults[0].songs[0].artistId).toBeDefined();
+      expect(sourceResults[0].songs[0].albumId).toBeDefined();
     });
   });
 });
