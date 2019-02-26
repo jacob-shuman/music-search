@@ -43,12 +43,15 @@ describe("Source", () => {
 
       const sourceResults: MusicResult[] = await MusicSearch.getSong(options);
 
+      // Result Count
       expect(sourceResults.length).toBeGreaterThan(0);
 
+      // Music Artist(s)/Album(s)/Song(s) Result Count
       expect(sourceResults[0].artists.length).toEqual(1);
       expect(sourceResults[0].albums.length).toBeLessThan(1);
       expect(sourceResults[0].songs.length).toBeGreaterThan(0);
 
+      // Artist/Album ID Defined
       expect(sourceResults[0].songs[0].artistId).toBeDefined();
       expect(sourceResults[0].songs[0].albumId).toBeUndefined();
     });
@@ -66,12 +69,15 @@ describe("Source", () => {
 
       const sourceResults: MusicResult[] = await MusicSearch.getSong(options);
 
+      // Result Count
       expect(sourceResults.length).toBeGreaterThan(0);
 
+      // Music Artist(s)/Album(s)/Song(s) Result Count
       expect(sourceResults[0].artists.length).toBeLessThan(1);
       expect(sourceResults[0].albums.length).toEqual(1);
       expect(sourceResults[0].songs.length).toBeGreaterThan(0);
 
+      // Artist/Album ID Defined
       expect(sourceResults[0].songs[0].artistId).toBeUndefined();
       expect(sourceResults[0].songs[0].albumId).toBeDefined();
     });
@@ -90,12 +96,15 @@ describe("Source", () => {
 
       const sourceResults: MusicResult[] = await MusicSearch.getSong(options);
 
+      // Result Count
       expect(sourceResults.length).toBeGreaterThan(0);
 
+      // Music Artist(s)/Album(s)/Song(s) Result Count
       expect(sourceResults[0].artists.length).toEqual(1);
       expect(sourceResults[0].albums.length).toEqual(1);
       expect(sourceResults[0].songs.length).toBeGreaterThan(0);
 
+      // Artist/Album ID Defined
       expect(sourceResults[0].songs[0].artistId).toBeDefined();
       expect(sourceResults[0].songs[0].albumId).toBeDefined();
     });

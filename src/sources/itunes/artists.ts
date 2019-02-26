@@ -104,7 +104,9 @@ export async function getArtist(options: MusicArtistQuery): Promise<MusicResult>
 
       // Retrieve artist songs based on albums
       for (let album of artistAlbums)
-        artistSongs = artistSongs.concat(await getAlbumSongs(album.id, options.albumLimit));
+        artistSongs = artistSongs.concat(
+          await getAlbumSongs(album.id, options.albumLimit, currentArist.id)
+        );
     } else if (options.includeSongs) {
       // Get an assortment of artist songs
       // This will more likely return results that are much more randomized since album is irrelevant
