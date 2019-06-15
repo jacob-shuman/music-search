@@ -1,7 +1,12 @@
 // 1 Minute Test Limit
 jest.setTimeout(1000 * 60);
 
-import {MusicSearch, MusicAlbumQuery, MusicResult, ItunesSearchSource} from "../../build/index";
+import {
+  MusicSearch,
+  MusicAlbumQuery,
+  MusicResult,
+  ItunesSearchSource
+} from "../../build/index";
 
 describe("Source", () => {
   describe("Itunes", () => {

@@ -14,7 +14,9 @@ export async function getAlbumArtist(
   let artistResult: MusicArtist | undefined = undefined;
 
   // Assign possibly already existing artist
-  artistResult = artists.find((currentArtist: MusicArtist) => currentArtist.id == artistId);
+  artistResult = artists.find(
+    (currentArtist: MusicArtist) => currentArtist.id == artistId
+  );
 
   // If it's a new artist then asynchronously retrieve it
   if (!artistResult && artistId) artistResult = await getArtistById(artistId);
@@ -58,7 +60,9 @@ export async function getAlbumSongs(
   return albumSongs;
 }
 
-export async function getAlbum(options: MusicAlbumQuery): Promise<MusicResult> {
+export async function getAlbum(
+  options: MusicAlbumQuery
+): Promise<MusicResult> {
   const albumResult: MusicResult = new MusicResult({
     source: new ItunesSearchSource(),
     artists: [],
@@ -81,7 +85,14 @@ export async function getAlbum(options: MusicAlbumQuery): Promise<MusicResult> {
     const currentAlbum: MusicAlbum = {
       id: album.collectionId!,
       name: album.collectionName,
-      trackCount: album.trackCount
+      trackCount: album.trackCount,
+      artUrl: album.artworkUrl100
+        ? album.artworkUrl100.replace("100x100", "600x600")
+        : album.artworkUrl60
+        ? album.artworkUrl60.replace("60x60", "600x600")
+        : album.artworkUrl30
+        ? album.artworkUrl30.replace("30x30", "600x600")
+        : undefined
     };
 
     let albumArtist: MusicArtist | undefined = undefined;
@@ -110,7 +121,8 @@ export async function getAlbum(options: MusicAlbumQuery): Promise<MusicResult> {
       );
 
       // Append all songs to [albumResult]'s [songs] array
-      if (albumSongs) for (let song of albumSongs) albumResult.songs.push(song);
+      if (albumSongs)
+        for (let song of albumSongs) albumResult.songs.push(song);
     }
 
     albumResult.albums.push(currentAlbum);
@@ -119,7 +131,9 @@ export async function getAlbum(options: MusicAlbumQuery): Promise<MusicResult> {
   return albumResult;
 }
 
-export async function getAlbumById(id: number): Promise<MusicAlbum | undefined> {
+export async function getAlbumById(
+  id: number
+): Promise<MusicAlbum | undefined> {
   const albumResults: Itunes.Result = await Itunes.lookup({
     keyType: Itunes.LookupType.ID,
     keys: [id.toString()],
@@ -134,7 +148,9 @@ export async function getAlbumById(id: number): Promise<MusicAlbum | undefined> 
     ? {
         id: album.collectionId,
         name: album.collectionName,
-        artUrl: album.artworkUrl60 ? album.artworkUrl60.replace("60x60", "600x600") : undefined
+        artUrl: album.artworkUrl60
+          ? album.artworkUrl60.replace("60x60", "600x600")
+          : undefined
       }
     : undefined;
 }

@@ -1,7 +1,13 @@
 // 1 Minute Test Limit
 jest.setTimeout(1000 * 60);
 
-import {MusicSearch, MusicSongQuery, MusicResult, ItunesSearchSource} from "../../build/index";
+import {
+  MusicSearch,
+  MusicSongQuery,
+  MusicResult,
+  ItunesSearchSource,
+  MusicAlbumQuery
+} from "../../build/index";
 
 describe("Source", () => {
   describe("Itunes", () => {
@@ -82,7 +88,7 @@ describe("Source", () => {
       expect(sourceResults[0].songs[0].albumId).toBeDefined();
     });
 
-    test("Song Search with Album", async () => {
+    test("Song Search with Artist and Album", async () => {
       expect.assertions(6);
 
       const options: MusicSongQuery = {
